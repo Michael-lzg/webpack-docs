@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>babel 指南 | webpack从入门到精通</title>
+    <meta name="description" content="讲解webpack相关知识点">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.1cb10e25.css" as="style"><link rel="preload" href="/assets/js/app.aa460e41.js" as="script"><link rel="preload" href="/assets/js/7.eecfade2.js" as="script"><link rel="prefetch" href="/assets/js/10.a759a65e.js"><link rel="prefetch" href="/assets/js/11.4231ba87.js"><link rel="prefetch" href="/assets/js/12.0d5f9ecf.js"><link rel="prefetch" href="/assets/js/2.ffe410d0.js"><link rel="prefetch" href="/assets/js/3.a9a8433f.js"><link rel="prefetch" href="/assets/js/4.25c78323.js"><link rel="prefetch" href="/assets/js/5.3323bb1b.js"><link rel="prefetch" href="/assets/js/6.d46bfe17.js"><link rel="prefetch" href="/assets/js/8.ef513609.js"><link rel="prefetch" href="/assets/js/9.da414fd4.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.1cb10e25.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">webpack从入门到精通</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">主页</a></div><div class="nav-item"><a href="/page/" class="nav-link router-link-active">知识库</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">github</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/Michael-lzg" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://juejin.im/user/5b52fd38f265da0f4c6fbd72/posts" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  博客
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">主页</a></div><div class="nav-item"><a href="/page/" class="nav-link router-link-active">知识库</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">github</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/Michael-lzg" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://juejin.im/user/5b52fd38f265da0f4c6fbd72/posts" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  博客
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><div class="sidebar-group first collapsable"><p class="sidebar-heading open"><span>webpack专题</span> <span class="arrow down"></span></p> <ul class="sidebar-group-items"><li><a href="/page/webpack/基本配置.html" class="sidebar-link">webpack 基本配置</a></li><li><a href="/page/webpack/知识问答.html" class="sidebar-link">webpack 知识问答</a></li><li><a href="/page/webpack/对比glup.html" class="sidebar-link">webpack 与 glup</a></li><li><a href="/page/webpack/搭建项目.html" class="sidebar-link">webpack4 搭建一个项目</a></li><li><a href="/page/webpack/优化打包.html" class="sidebar-link">webpack 打包优化</a></li><li><a href="/page/webpack/loader.html" class="sidebar-link">手写一个 loader</a></li><li><a href="/page/webpack/babel.html" class="active sidebar-link">babel 指南</a><ul class="sidebar-sub-headers"></ul></li></ul></div></li></ul> </div> <div class="page"> <div class="content"><h1 id="babel-指南"><a href="#babel-指南" aria-hidden="true" class="header-anchor">#</a> babel 指南</h1> <h3 id="什么是-babel？"><a href="#什么是-babel？" aria-hidden="true" class="header-anchor">#</a> 什么是 Babel？</h3> <p>Babel 是一个工具链，主要用于将 ECMAScript 2015+ 版本的代码转换为向后兼容的 JavaScript 语法，以便能够运行在当前和旧版本的浏览器或其他环境中。下面列出的是 Babel 能为你做的事情：</p> <ul><li>语法转换</li> <li>通过 Polyfill 方式在目标环境中添加缺失的特性 (通过 @babel/polyfill 模块)</li> <li>源码转换 (codemods)</li></ul> <h3 id="babel-的基本原理"><a href="#babel-的基本原理" aria-hidden="true" class="header-anchor">#</a> Babel 的基本原理</h3> <p>Babel 的核心就是 AST (抽象语法树)。首先将源码转成抽象语法树，然后对语法树进行处理生成新的语法树，最后将新语法树生成新的 JS 代码，整个编译过程可以分为 3 个阶段 parsing (解析)、transforming (转换)、generating (生成)，都是在围绕着 AST 去做文章。</p> <p><strong>解析</strong>
+将代码解析成抽象语法树（AST），每个js引擎（比如Chrome浏览器中的V8引擎）都有自己的AST解析器，而Babel是通过Babylon实现的。在解析过程中有两个阶段：词法分析和语法分析，词法分析阶段把字符串形式的代码转换为令牌（tokens）流，令牌类似于AST中节点；而语法分析阶段则会把一个令牌流转换成 AST的形式，同时这个阶段会把令牌中的信息转换成AST的表述结构。</p> <p><strong>转换</strong>
+在这个阶段，Babel接受得到AST并通过babel-traverse对其进行深度优先遍历，在此过程中对节点进行添加、更新及移除操作。这部分也是Babel插件介入工作的部分。</p> <p><strong>生成</strong>
+将经过转换的AST通过babel-generator再转换成js代码，过程就是深度优先遍历整个AST，然后构建可以表示转换后代码的字符串。</p> <p>Babel 只负责编译新标准引入的新语法，比如 Arrow function、Class、ES Modul 等，它不会编译原生对象新引入的方法和 API，比如 Array.includes，Map，Set 等，这些需要通过 Polyfill 来解决，</p> <h3 id="抽象语法树（ast）"><a href="#抽象语法树（ast）" aria-hidden="true" class="header-anchor">#</a> 抽象语法树（AST）</h3> <p>代码解析成AST的目的就是方便计算机更好地理解我们的代码。这里我们先写一段代码：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">function</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> x <span class="token operator">+</span> y<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>然后将代码解析成抽象语法树，表示成JSON形式如下：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">{</span>
+  <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Program&quot;</span><span class="token punctuation">,</span>
+  <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+  <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">52</span><span class="token punctuation">,</span>
+  <span class="token string">&quot;body&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;FunctionDeclaration&quot;</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">40</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;id&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Identifier&quot;</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">9</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">12</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;add&quot;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;expression&quot;</span><span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;generator&quot;</span><span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;params&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+          <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Identifier&quot;</span><span class="token punctuation">,</span>
+          <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">13</span><span class="token punctuation">,</span>
+          <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">14</span><span class="token punctuation">,</span>
+          <span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;x&quot;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+          <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Identifier&quot;</span><span class="token punctuation">,</span>
+          <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">16</span><span class="token punctuation">,</span>
+          <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">17</span><span class="token punctuation">,</span>
+          <span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;y&quot;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;body&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;BlockStatement&quot;</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">19</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">40</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;body&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">{</span>
+            <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;ReturnStatement&quot;</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">25</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">38</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;argument&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+              <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;BinaryExpression&quot;</span><span class="token punctuation">,</span>
+              <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">32</span><span class="token punctuation">,</span>
+              <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">37</span><span class="token punctuation">,</span>
+              <span class="token string">&quot;left&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Identifier&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">32</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">33</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;x&quot;</span>
+              <span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token string">&quot;operator&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;+&quot;</span><span class="token punctuation">,</span>
+              <span class="token string">&quot;right&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Identifier&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">36</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">37</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;y&quot;</span>
+              <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;ExpressionStatement&quot;</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">42</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">52</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;expression&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;CallExpression&quot;</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">42</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">51</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;callee&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+          <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Identifier&quot;</span><span class="token punctuation">,</span>
+          <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">42</span><span class="token punctuation">,</span>
+          <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">45</span><span class="token punctuation">,</span>
+          <span class="token string">&quot;name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;add&quot;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;arguments&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">{</span>
+            <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Literal&quot;</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">46</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">47</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;value&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;raw&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;1&quot;</span>
+          <span class="token punctuation">}</span><span class="token punctuation">,</span>
+          <span class="token punctuation">{</span>
+            <span class="token string">&quot;type&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;Literal&quot;</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;start&quot;</span><span class="token punctuation">:</span> <span class="token number">49</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;end&quot;</span><span class="token punctuation">:</span> <span class="token number">50</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;value&quot;</span><span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+            <span class="token string">&quot;raw&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;2&quot;</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token string">&quot;sourceType&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;module&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="babel各个模块介绍"><a href="#babel各个模块介绍" aria-hidden="true" class="header-anchor">#</a> babel各个模块介绍</h3> <h4 id="babel-core"><a href="#babel-core" aria-hidden="true" class="header-anchor">#</a> babel-core</h4> <p>Babel 的核心功能包含在 @babel/core 模块中。看到 core 这个词了吧，意味着核心，没有它，在 babel 的世界里注定寸步难行。不安装 @babel/core，无法使用 babel 进行编译。</p> <h4 id="babel-cli和-babel-node"><a href="#babel-cli和-babel-node" aria-hidden="true" class="header-anchor">#</a> @babel/cli和 @babel/node</h4> <p>@babel/cli 是 Babel 提供的内建命令行工具。提到 @babel/cli 这里就不得不提一下 @babel/node ，这哥俩虽然都是命令行工具，但是使用场景不同，babel/cli 是安装在项目中，而 @babel/node 是全局安装。</p> <h4 id="polyfill"><a href="#polyfill" aria-hidden="true" class="header-anchor">#</a> polyfill</h4> <p>polyfill在代码中的作用主要是用已经存在的语法和api实现一些浏览器还没有实现的api，对浏览器的一些缺陷做一些修补。babel为什么存在polyfill。因为babel的转译只是语法层次的转译，例如箭头函数、解构赋值、class，对一些新增api以及全局函数（例如：Promise）无法进行转译，这个时候就需要在代码中引入babel-polyfill，让代码完美支持ES6+环境。</p> <h4 id="babel-parser"><a href="#babel-parser" aria-hidden="true" class="header-anchor">#</a> @babel/parser</h4> <p>负责将代码解析为抽象语法树</p> <h4 id="babel-traverse"><a href="#babel-traverse" aria-hidden="true" class="header-anchor">#</a> @babel/traverse</h4> <p>遍历抽象语法树的工具，我们可以在语法树中解析特定的节点，然后做一些操作</p> <h3 id="babel-的配置文件"><a href="#babel-的配置文件" aria-hidden="true" class="header-anchor">#</a> Babel 的配置文件</h3> <p>最常用的方法是在你的项目中创建名为 .babelrc 的文件</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">{</span>
+ <span class="token string">&quot;presets&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token operator">...</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+ <span class="token string">&quot;plugins&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token operator">...</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h4 id="package-json"><a href="#package-json" aria-hidden="true" class="header-anchor">#</a> package.json</h4> <p>可以将 .babelrc 中的配置信息作为 babel 键(key) 添加到 package.json 文件中:</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">{</span> 
+  <span class="token string">&quot;babel&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>        
+    <span class="token string">&quot;presets&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>        
+    <span class="token string">&quot;plugins&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>    
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h4 id="babelrc-js"><a href="#babelrc-js" aria-hidden="true" class="header-anchor">#</a> .babelrc.js</h4> <p>与 .babelrc 配置相同，但是可以使用JS编写。</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> presets <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token keyword">const</span> plugins <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span> presets<span class="token punctuation">,</span> plugins <span class="token punctuation">}</span>
+</code></pre></div><h4 id="babel-config-js"><a href="#babel-config-js" aria-hidden="true" class="header-anchor">#</a> babel.config.js</h4> <p>在项目根目录下创建一个名为 babel.config.js 的文件。</p> <div class="language-js extra-class"><pre class="language-js"><code>module<span class="token punctuation">.</span><span class="token function-variable function">exports </span><span class="token operator">=</span> 
+  <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">api</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>    
+    api<span class="token punctuation">.</span><span class="token function">cache</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
+    <span class="token keyword">const</span> presets <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">...</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+    <span class="token keyword">const</span> plugins <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">...</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>        
+      presets<span class="token punctuation">,</span>        
+      plugins    
+    <span class="token punctuation">}</span>    
+  <span class="token punctuation">}</span> 
+</code></pre></div><h3 id="plugins"><a href="#plugins" aria-hidden="true" class="header-anchor">#</a> plugins</h3> <p>plugins是babel中的插件，通过配置不同的插件才能告诉babel，我们的代码中有哪些是需要转译的。插件的执行顺序是从左往右执行。</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">{</span>
+  <span class="token string">&quot;plugins&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token string">&quot;transform-es2015-arrow-functions&quot;</span><span class="token punctuation">,</span> <span class="token comment">//转译箭头函数</span>
+    <span class="token string">&quot;transform-es2015-classes&quot;</span><span class="token punctuation">,</span> <span class="token comment">//转译class语法</span>
+    <span class="token string">&quot;transform-es2015-spread&quot;</span><span class="token punctuation">,</span> <span class="token comment">//转译数组解构</span>
+    <span class="token string">&quot;transform-es2015-for-of&quot;</span> <span class="token comment">//转译for-of</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+<span class="token comment">//如果要为某个插件添加配置项，按如下写法：</span>
+<span class="token punctuation">{</span>
+  <span class="token string">&quot;plugins&quot;</span><span class="token punctuation">:</span><span class="token punctuation">[</span>
+    <span class="token comment">//改为数组，第二个元素为配置项</span>
+    <span class="token punctuation">[</span><span class="token string">&quot;transform-es2015-arrow-functions&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token string">&quot;spec&quot;</span><span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="presets"><a href="#presets" aria-hidden="true" class="header-anchor">#</a> presets</h3> <p>显然这样一个一个配置插件会非常的麻烦，为了方便，babel为我们提供了一个配置项叫做persets（预设）。预设就是一系列插件的集合，就好像修图一样，把上次修图的一些参数保存为一个预设，下次就能直接使用。  前面提到插件的执行顺序是从左往右，而预设的执行顺序恰好反其道行之，它是从右往左。</p> <p>如果要转译ES6语法，只要按如下方式配置即可：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">//先安装ES6相关preset： cnpm install -D babel-preset-es2015</span>
+<span class="token punctuation">{</span>
+  <span class="token string">&quot;presets&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;es2015&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h4 id="babel-preset-env"><a href="#babel-preset-env" aria-hidden="true" class="header-anchor">#</a> @babel/preset-env</h4> <p>@babel/preset-env 主要作用是对我们所使用的并且目标浏览器中缺失的功能进行代码转换和加载 polyfill，在不进行任何配置的情况下，@babel/preset-env 所包含的插件将支持所有最新的JS特性(ES2015,ES2016等，不包含 stage 阶段)，将其转换成ES5代码。例如，如果你的代码中使用了可选链(目前，仍在 stage 阶段)，那么只配置 @babel/preset-env，转换时会抛出错误，需要另外安装相应的插件。</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// .babelrc</span>
+<span class="token punctuation">{</span>    
+  <span class="token string">&quot;presets&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;@babel/preset-env&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>@babel/preset-env 会根据你配置的目标环境，生成插件列表来编译。对于基于浏览器或 Electron 的项目，官方推荐使用 .browserslistrc 文件来指定目标环境。默认情况下，如果你没有在 Babel 配置文件中(如 .babelrc)设置 targets 或 ignoreBrowserslistConfig，@babel/preset-env 会使用 browserslist 配置源。
+如果你不是要兼容所有的浏览器和环境，推荐你指定目标环境，这样你的编译代码能够保持最小</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">//.browserslistrc</span>
+<span class="token operator">&gt;</span> <span class="token number">0.25</span><span class="token operator">%</span>
+not dead
+</code></pre></div></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/page/webpack/loader.html" class="prev">
+          手写一个 loader
+        </a></span> <!----></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.aa460e41.js" defer></script><script src="/assets/js/7.eecfade2.js" defer></script>
+  </body>
+</html>
