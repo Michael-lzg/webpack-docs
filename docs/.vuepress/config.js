@@ -35,7 +35,7 @@ module.exports = {
       ]
     }
   },
-  dest: './docs/.vuepress/dist',
+  dest: './dist',
   ga: '',
   evergreen: true,
 }
