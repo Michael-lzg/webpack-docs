@@ -7,7 +7,7 @@
     <meta name="description" content="讲解webpack相关知识点">
     
     
-    <link rel="preload" href="/assets/css/0.styles.1cb10e25.css" as="style"><link rel="preload" href="/assets/js/app.aa460e41.js" as="script"><link rel="preload" href="/assets/js/11.4231ba87.js" as="script"><link rel="prefetch" href="/assets/js/10.a759a65e.js"><link rel="prefetch" href="/assets/js/12.0d5f9ecf.js"><link rel="prefetch" href="/assets/js/2.ffe410d0.js"><link rel="prefetch" href="/assets/js/3.a9a8433f.js"><link rel="prefetch" href="/assets/js/4.25c78323.js"><link rel="prefetch" href="/assets/js/5.3323bb1b.js"><link rel="prefetch" href="/assets/js/6.d46bfe17.js"><link rel="prefetch" href="/assets/js/7.eecfade2.js"><link rel="prefetch" href="/assets/js/8.ef513609.js"><link rel="prefetch" href="/assets/js/9.da414fd4.js">
+    <link rel="preload" href="/assets/css/0.styles.1cb10e25.css" as="style"><link rel="preload" href="/assets/js/app.b6cb780a.js" as="script"><link rel="preload" href="/assets/js/11.4231ba87.js" as="script"><link rel="prefetch" href="/assets/js/10.a759a65e.js"><link rel="prefetch" href="/assets/js/12.0d5f9ecf.js"><link rel="prefetch" href="/assets/js/2.ffe410d0.js"><link rel="prefetch" href="/assets/js/3.a9a8433f.js"><link rel="prefetch" href="/assets/js/4.25c78323.js"><link rel="prefetch" href="/assets/js/5.3323bb1b.js"><link rel="prefetch" href="/assets/js/6.d46bfe17.js"><link rel="prefetch" href="/assets/js/7.eecfade2.js"><link rel="prefetch" href="/assets/js/8.ef513609.js"><link rel="prefetch" href="/assets/js/9.da414fd4.js">
     <link rel="stylesheet" href="/assets/css/0.styles.1cb10e25.css">
   </head>
   <body>
@@ -142,6 +142,6 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 <span class="token punctuation">]</span>
 </code></pre></div><h2 id="source-map-生产环境怎么用"><a href="#source-map-生产环境怎么用" aria-hidden="true" class="header-anchor">#</a> source map 生产环境怎么用</h2> <p>source map 是将编译、打包、压缩后的代码映射回源代码的过程。打包压缩后的代码不具备良好的可读性，想要调试源码就需要 soucre map。
 map文件只要不打开开发者工具，浏览器是不会加载的。线上环境一般有三种处理方案：</p> <ul><li>hidden-source-map：借助第三方错误监控平台 Sentry 使用</li> <li>nosources-source-map：只会显示具体行数以及查看源代码的错误栈。安全性比 sourcemap 高</li> <li>sourcemap：通过 nginx 设置将 .map 文件只对白名单开放(公司内网)</li></ul> <p>注意：避免在生产中使用 inline- 和 eval-，因为它们会增加 bundle 体积大小，并降低整体性能。</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
-    <script src="/assets/js/app.aa460e41.js" defer></script><script src="/assets/js/11.4231ba87.js" defer></script>
+    <script src="/assets/js/app.b6cb780a.js" defer></script><script src="/assets/js/11.4231ba87.js" defer></script>
   </body>
 </html>
