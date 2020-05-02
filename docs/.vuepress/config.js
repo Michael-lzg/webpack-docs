@@ -1,8 +1,8 @@
 module.exports = {
   title: 'webpack从入门到精通', // 设置网站标题
-  base: '/',
+  base: '/webpack-docs/',
+  repo: 'https://github.com/Michael-lzg/webpack-docs',
   description: '讲解webpack相关知识点', //描述
-  dest: './dist', // 设置输出目录
   port: 3000, //端口
   themeConfig: { //主题配置
     // 添加导航栏
