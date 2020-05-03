@@ -20,18 +20,38 @@ module.exports = {
     sidebar: {
       '/page/': [
         {
-          title: 'webpack专题',
-          // collapsable: false,
+          title: 'webpack前世今生',
+          collapsable: false,
           children: [
-            'webpack/基本配置',
-            'webpack/知识问答',
-            'webpack/对比glup',
-            'webpack/搭建项目',
-            'webpack/优化打包',
-            'webpack/loader',
-            'webpack/babel',
+            'fonted/前端模块化',
+            'fonted/glup',
           ]
-        }
+        },
+        {
+          title: 'webpack基础篇',
+          collapsable: false,
+          children: [
+            'base/entry',
+            'base/loader',
+            'base/plugin',
+            'base/webpack-dev-derver',
+            'base/sourcemap',
+            'base/babel',
+            'base/hash',
+            'base/知识问答',
+            // 'base/对比glup',
+            // 'base/搭建项目',
+            // 'base/优化打包',
+          ]
+        },
+        {
+          title: 'webpack深入篇',
+          collapsable: false,
+          children: [
+            'advanced/搭建项目',
+            'advanced/优化打包',
+          ]
+        },
       ]
     }
   },

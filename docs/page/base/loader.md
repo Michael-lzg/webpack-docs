@@ -1,89 +1,34 @@
-### Webpack 的四大核心：
-
-- entry：js 入口源文件
-- output：生成文件
-- loader：进行文件处理
-- plugins：插件，比 loader 更强大，能使用更多 webpack 的 api
-
-## Entry
-
-webpack 应该使用哪个模块做为入口文件，来作为构建其内部依赖图的开始。进去入口起点后，webpack 会找出有哪些模块和库是入口起点（直接和间接）依赖的，每个依赖项随即被处理，最后输出到称之为 bundles 的文件中。
-
-单⼊⼝：entry 是⼀个字符串
-
-```js
-module.exports = {
-  entry: './src/index.js',
-}
-```
-
-多⼊⼝：entry 是⼀个对象
-
-```js
-module.exports = {
-  entry: {
-    index: './src/index.js',
-    manager: './src/manager.js',
-  },
-}
-```
-
-## Output
-
-告诉 webpack 在哪里输出它所创建的 bundles，以及如何命名这些文件，这些都可以在 webpack 的配置文件中指定。
-
-单⼊⼝配置
-
-```js
-module.exports = {
-    entry: './src/index.js',
-    output: {
-        filename: 'bundle.js’,
-        path: __dirname + '/dist'
-    }
-};
-```
-
-多⼊⼝配置
-
-```js
-module.exports = {
-  entry: {
-    app: './src/app.js',
-    search: './src/search.js',
-  },
-  output: {
-    filename: '[name].js',
-    path: __dirname + '/dist',
-  },
-}
-```
-
-此外，还可以生成带 hash 的 fileName。
-
-```js
-module.exports = {
-  entry: {
-    app: './src/app.js',
-    search: './src/search.js',
-  },
-  output: {
-    path: path.join(__dirname, '/dist'), //打包后的文件存放的地方
-    filename: 'js/[name].[chunkhash:8].js',
-    chunkFilename: 'js/[name].[chunkhash:8].js',
-  },
-}
-```
-
-## Loader
+# Loader
 
 `loader` 让 `webpack` 能够去处理那些非 `javaScript` 文件（`webpack` 自身只理解 `javaScript`）。`loader` 可以将所有类型的文件转换为 `webpack` 能够处理的有效模块，然后你就可以利用 `webpack` 的打包能力，对它们进行处理。
 
 ### loader 的特点
 
-- 一个 Loader 的职责是单一的，只需要完成一种转换
-- 一个 Loader 其实就是一个 Node.js 模块，这个模块需要导出一个函数
-- loader 总是从右到左地被调用。
+1. 一个 Loader 的职责是单一的，只需要完成一种转换。
+
+2. 一个 Loader 其实就是一个 Node.js 模块，这个模块需要导出一个函数
+```js
+module.exports = function (content) {
+  return content && content.replace(/kobe/gi, 'Black Mamba')
+}
+```
+
+3.  loader 总是从右到左地被调用。
+
+函数组合通常有两种方式，一种是从左到右(类似 unix 的 pipe)，另外一种是从右到左(compose)。webpack 选择的是 compose 方式，从右到左依次执行 loader，每个 loader 是一个函数。
+
+webpack 里面的 compose 代码如下：
+
+```js
+const compose = (...fns) => {
+  return fns.reduce(
+    (prevFn, nextFn) => {
+      return value => nextFn(prevFn(value))
+    },
+    value => value
+  )
+}
+```
 
 ### loader 的配置
 
@@ -322,57 +267,4 @@ module.exports = function (content) {
     }
   }
 }
-```
-
-## Plugin
-
-专注处理 webpack 在编译过程中的某个特定的任务的功能模块，可以称为插件。
-
-### Plugin 的特点
-
-- 是一个独立的模块
-- 模块对外暴露一个 js 函数
-- 函数的原型 `(prototype)` 上定义了一个注入 `compiler` 对象的 `apply`方法 `apply` 函数中需要有通过 `compiler` 对象挂载的 `webpack` 事件钩子，钩子的回调中能拿到当前编译的 `compilation` 对象，如果是异步编译插件的话可以拿到回调 `callback`
-- 完成自定义子编译流程并处理 `complition` 对象的内部数据
-- 如果异步编译插件的话，数据处理完成后执行 `callback` 回调。
-
-### 常用 Plugin
-
-- `HotModuleReplacementPlugin` 代码热替换。因为 `Hot-Module-Replacement` 的热更新是依赖于 `webpack-dev-server`，后者是在打包文件改变时更新打包文件或者 reload 刷新整个页面，`HRM` 是只更新修改的部分。
-- `HtmlWebpackPlugin`, 生成 html 文件。将 webpack 中`entry`配置的相关入口 chunk 和 `extract-text-webpack-plugin`抽取的 css 样式 插入到该插件提供的`template`或者`templateContent`配置项指定的内容基础上生成一个 html 文件，具体插入方式是将样式`link`插入到`head`元素中，`script`插入到`head`或者`body`中。
-
-- `ExtractTextPlugin`, 将 css 成生文件，而非内联 。该插件的主要是为了抽离 css 样式,防止将样式打包在 js 中引起页面样式加载错乱的现象。
-- `NoErrorsPlugin`报错但不退出 webpack 进程
-- `UglifyJsPlugin`，代码丑化，开发过程中不建议打开。 `uglifyJsPlugin` 用来对 js 文件进行压缩，从而减小 js 文件的大小，加速 load 速度。`uglifyJsPlugin` 会拖慢 webpack 的编译速度，所有建议在开发简单将其关闭，部署的时候再将其打开。多个 html 共用一个 js 文件(chunk)，可用 `CommonsChunkPlugin`
-
-- `purifycss-webpack`  。打包编译时，可剔除页面和 js 中未被使用的 css，这样使用第三方的类库时，只加载被使用的类，大大减小 css 体积
-- `optimize-css-assets-webpack-plugin`   压缩 css，优化 css 结构，利于网页加载和渲染
-- `webpack-parallel-uglify-plugin`   可以并行运行 UglifyJS 插件，这可以有效减少构建时间
-
-#### 开发一个插件
-
-举个例子
-
-```js
-// 1、BasicPlugin.js 文件（独立模块）
-// 2、模块对外暴露的 js 函数
-class BasicPlugin {
-  //在构造函数中获取用户为该插件传入的配置
-  constructor(pluginOptions) {
-    this.options = pluginOptions
-  }
-  //3、原型定义一个 apply 函数，并注入了 compiler 对象
-  apply(compiler) {
-    //4、挂载 webpack 事件钩子（这里挂载的是 emit 事件）
-    compiler.plugin('emit', function (compilation, callback) {
-      // ... 内部进行自定义的编译操作
-      // 5、操作 compilation 对象的内部数据
-      console.log(compilation)
-      // 6、执行 callback 回调
-      callback()
-    })
-  }
-}
-// 7、暴露 js 函数
-module.exports = BasicPlugin
 ```
