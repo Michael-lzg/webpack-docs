@@ -25,6 +25,7 @@ module.exports = {
           children: [
             'fonted/前端模块化',
             'fonted/glup',
+            'fonted/webpack4.0',
           ]
         },
         {
@@ -36,19 +37,17 @@ module.exports = {
             'base/plugin',
             'base/webpack-dev-derver',
             'base/sourcemap',
+            'base/optimization',
             'base/babel',
             'base/hash',
             'base/知识问答',
-            // 'base/对比glup',
-            // 'base/搭建项目',
-            // 'base/优化打包',
           ]
         },
         {
           title: 'webpack深入篇',
           collapsable: false,
           children: [
-            'advanced/搭建项目',
+            'advanced/demo',
             'advanced/优化打包',
           ]
         },
