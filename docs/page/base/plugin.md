@@ -59,6 +59,62 @@ inject 有四个选项值
 - head：script 标签位于 head 标签内
 - false：不插入生成的 js 文件，只是单纯的生成一个 html 文件
 
+#### 多页应用打包
+
+有时，我们的应用不一定是一个单页应用，而是一个多页应用，那么如何使用 webpack 进行打包呢。
+
+```js
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+module.exports = {
+  entry: {
+    index: './src/index.js',
+    login: './src/login.js',
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[hash:6].js',
+  },
+  //...
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+      filename: 'index.html', //打包后的文件名
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/login.html',
+      filename: 'login.html', //打包后的文件名
+    }),
+  ],
+}
+```
+
+如果需要配置多个 `HtmlWebpackPlugin`，那么 `filename` 字段不可缺省，否则默认生成的都是 `index.html`。
+
+但是有个问题，`index.html` 和 `login.html` 会发现，都同时引入了 `index.f7d21a.js` 和 `login.f7d21a.js`，通常这不是我们想要的，我们希望 `index.html` 中只引入 `index.f7d21a.js`，`login.html` 只引入 `login.f7d21a.js`。
+
+`HtmlWebpackPlugin` 提供了一个 `chunks` 的参数，可以接受一个数组，配置此参数仅会将数组中指定的 js 引入到 html 文件中
+
+```js
+module.exports = {
+  //...
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+      filename: 'index.html', //打包后的文件名
+      chunks: ['index'],
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/login.html',
+      filename: 'login.html', //打包后的文件名
+      chunks: ['login'],
+    }),
+  ],
+}
+```
+
+这样执行 npm run build，可以看到 index.html 中仅引入了 index 的 js 文件，而 login.html 中也仅引入了 login 的 js 文件。
+
 ### clean-webpack-plugin
 
 在每次构建前清理/dist 文件夹，是比较推荐的做法，因此只会生成用到的文件，这时候就用到 CleanWebpackPlugin 插件了。
@@ -281,6 +337,7 @@ module.exports = {
     //提供全局的变量，在模块中使用无需用require引入
     new webpack.ProvidePlugin({
       $: 'jquery',
+      React: 'react',
     }),
   ],
 }

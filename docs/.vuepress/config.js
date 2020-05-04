@@ -49,6 +49,7 @@ module.exports = {
           children: [
             'advanced/demo',
             'advanced/优化打包',
+            'advanced/webpack-chain',
           ]
         },
       ]

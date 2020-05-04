@@ -78,7 +78,7 @@ rules: [
 ```
 
 - `style-loader` 放在 `css-loader` 后面是因为 webpack 打包机制是按照数组从后往前的顺序将资源交个 loader 处理。
-- `postcss-loade`r 要和`autoprefixer`一起使用。在项目根目录下新建 postcss.config.js 文件:
+- `postcss-loader` 要和`autoprefixer`一起使用。在项目根目录下新建 postcss.config.js 文件:
 
 ```js
 module.exports = {
