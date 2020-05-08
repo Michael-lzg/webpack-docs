@@ -37,6 +37,7 @@ module.exports = {
             'base/plugin',
             'base/webpack-dev-derver',
             'base/sourcemap',
+            'base/externals',
             'base/optimization',
             'base/babel',
             'base/hash',
@@ -47,8 +48,10 @@ module.exports = {
           title: 'webpack深入篇',
           collapsable: false,
           children: [
-            'advanced/demo',
-            'advanced/优化打包',
+            'advanced/从零构建一个wbpack项目',
+            'advanced/用webpack构建一个vue项目',
+            'advanced/移动端开发模板',
+            'advanced/webpack优化打包大全',
             'advanced/webpack-chain',
           ]
         },
