@@ -49,6 +49,7 @@ module.exports = {
           collapsable: false,
           children: [
             'advanced/webpack的打包机制',
+            'advanced/webpack插件原理',
             'advanced/从零构建一个wbpack项目',
             'advanced/用webpack构建一个vue项目',
             'advanced/移动端开发模板',
