@@ -1,8 +1,13 @@
 # webpack 插件原理
 
-插件基本结构:
+webpack 插件的特征
 
-插件是可以用自身原型方法 apply 来实例化的对象。apply 只在安装插件被 Webpack compiler 执行一次。apply 方法传入一个 webpck compiler 的引用，来访问编译器回调。
+* 是一个独立的模块。
+* 模块对外暴露一个 js 函数。
+* 函数的原型 (prototype) 上定义了一个注入 compiler 对象的 apply 方法。
+* apply 函数中需要有通过 compiler 对象挂载的 webpack 事件钩子，钩子的回调中能拿到当前编译的 compilation 对象，如果是异步编译插件的话可以拿到回 调 callback。
+* 完成自定义子编译流程并处理 complition 对象的内部数据。
+* 如果异步编译插件的话，数据处理完成后执行 callback 回调。
 
 ```js
 class HelloPlugin {
@@ -38,9 +43,7 @@ webpack 本质上是一种事件流的机制，它的工作流程就是将各个
 
 Webpack 的 Tapable 事件流机制保证了插件的有序性，将各个插件串联起来， Webpack 在运行过程中会广播事件，插件只需要监听它所关心的事件，就能加入到这条 webapck 机制中，去改变 webapck 的运作，使得整个系统扩展性良好。
 
-Tapable 也是一个小型的 library，是 Webpack 的一个核心工具。类似于 node 中的 events 库，核心原理就是一个`订阅发布模式`。作用是提供类似的插件接口。
-
-webpack 中最核心的负责编译的 Compiler 和负责创建 bundles 的 Compilation 都是 Tapable 的实例，可以直接在 Compiler 和 Compilation 对象上广播和监听事件，方法如下：
+Tapable 也是一个小型的 library，是 Webpack 的一个核心工具。类似于 node 中的 events 库，核心原理就是一个`订阅发布模式`。作用是提供类似的插件接口。方法如下：
 
 ```js
 //  广播事件
@@ -84,8 +87,34 @@ Tapable.prototype.apply = function apply() {
 }
 ```
 
+Tapable 为 webpack 提供了统一的插件接口（钩子）类型定义，它是 webpack 的核心功能库。webpack 中目前有十种 hooks，在 Tapable 源码中可以看到，他们是：
+
+```js
+exports.SyncHook = require("./SyncHook");
+exports.SyncBailHook = require("./SyncBailHook");
+exports.SyncWaterfallHook = require("./SyncWaterfallHook");
+exports.SyncLoopHook = require("./SyncLoopHook");
+exports.AsyncParallelHook = require("./AsyncParallelHook");
+exports.AsyncParallelBailHook = require("./AsyncParallelBailHook");
+exports.AsyncSeriesHook = require("./AsyncSeriesHook");
+exports.AsyncSeriesBailHook = require("./AsyncSeriesBailHook");
+exports.AsyncSeriesLoopHook = require("./AsyncSeriesLoopHook");
+exports.AsyncSeriesWaterfallHook = require("./AsyncSeriesWaterfallHook");
+```
+Tapable 还统一暴露了三个方法给插件，用于注入不同类型的自定义构建行为：
+
+* tap：可以注册同步钩子和异步钩子。
+* tapAsync：回调方式注册异步钩子。
+* tapPromise：Promise方式注册异步钩子。
+
+webpack 里的几个非常重要的对象，Compiler, Compilation 和 JavascriptParser 都继承了 Tapable 类，它们身上挂着丰富的钩子。
+
 ### Compiler 对象 （负责编译）
-Compiler 对象包含了当前运行Webpack的配置，包括entry、output、loaders等配置，这个对象在启动Webpack时被实例化，而且是全局唯一的。Plugin可以通过该对象获取到Webpack的配置信息进行处理。
+Compiler 对象包含了当前运行Webpack的配置，包括entry、output、loaders等配置，这个对象在启动Webpack时被实例化，而且是全局唯一的。Plugin可以通过该对象获取到Webpack的配置信息进行处理。  
+
+compiler上暴露的一些常用的钩子：
+
+<img src="../img/compiler.png">
 
 ### Compilation对象
 Compilation对象代表了一次资源版本构建。当运行 webpack 开发环境中间件时，每当检测到一个文件变化，就会创建一个新的 compilation，从而生成一组新的编译资源。一个 Compilation 对象表现了当前的模块资源、编译生成资源、变化的文件、以及被跟踪依赖的状态信息，简单来讲就是把本次打包编译的内容存到内存里。Compilation 对象也提供了插件需要自定义功能的回调，以供插件做自定义处理时选择使用拓展。
@@ -94,8 +123,12 @@ Compilation对象代表了一次资源版本构建。当运行 webpack 开发环
 
 Compiler 代表了整个 Webpack 从启动到关闭的生命周期，而 Compilation 只是代表了一次新的编译，只要文件有改动，compilation就会被重新创建。
 
+Compilation 上暴露的一些常用的钩子：
+<img src="../img/compilation.png">
+
 ### 参考文献
 
 [揭秘 webpack 插件工作流程和原理](https://mp.weixin.qq.com/s?__biz=MzI5MjUxNjA4Mw==&mid=2247487144&idx=1&sn=f2da0c02f779948da961988b60cfd9fc&chksm=ec017734db76fe22661ce3ca8993d7b7edb37a87d837f864a04f02fe45196bcfcf4050c21540&mpshare=1&scene=1&srcid=&sharer_sharetime=1589761607298&sharer_shareid=6ac1a929ca7b722baddb7852d6a9db2e#rd)  
 [WebPack 插件机制探索](https://blog.didiyun.com/index.php/2019/03/01/webpack/)
 [Webpack 揭秘——走向高阶前端的必经之路](https://juejin.im/post/5badd0c5e51d450e4437f07a)
+[霖呆呆的六个自定义Webpack插件详解](https://juejin.im/post/5ec16a2e5188256d841a53d0#heading-29)

@@ -41,7 +41,6 @@ module.exports = {
             'base/optimization',
             'base/babel',
             'base/hash',
-            'base/知识问答',
           ]
         },
         {
@@ -49,6 +48,7 @@ module.exports = {
           collapsable: false,
           children: [
             'advanced/webpack的打包机制',
+            'advanced/热更新原理',
             'advanced/webpack插件原理',
             'advanced/从零构建一个wbpack项目',
             'advanced/用webpack构建一个vue项目',
