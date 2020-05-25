@@ -1,4 +1,4 @@
-# 用webpack构建一个vue项目
+# 用 webpack 构建一个 vue 项目
 
 在这里，我们要做的事情包括
 
@@ -6,7 +6,7 @@
 - 搭建 vue 模块化开发环境
 - webpack 优化打包
 
-你需要理解的基本知识
+你需要了解的基本知识
 
 - html，css，javascript
 - ES6 语法
@@ -14,7 +14,7 @@
 - vue，vue-router
 - 前端模块化
 
-废话不多说，老司机带你马上上路。
+废话不多说，老司机带你立刻上路。
 
 ## 搭建 webpack 项目框架
 
@@ -46,7 +46,7 @@ index.html 和 main.js 的代码不多说，直接进入 webpack 配置环节。
 
 ### webpack 基本配置
 
-为了更好的优化打包，我们将 webpack 的配置分开本地环境和生产环境。
+为了更好的优化打包，我们将 webpack 的配置分开开发环境和生产环境。
 
 - webpack.base.js 公共配置文件
 - webpack.dev.js 开发环境的配置文件
@@ -112,7 +112,7 @@ plugins: [
 ]
 ```
 
-至此就搭建好一个乞丐版的 webpack 项目了。
+至此就搭建好一个乞丐版的 webpack 项目了，你可以随意编写代码，分别在开发环境和生产环境执行命令查看效果。
 
 ### loader 配置
 
@@ -189,7 +189,12 @@ plugins: [
 
 平时我们写 css 时，一些属性需要手动加上前缀，比如-webkit-border-radius: 10px;，在 webpack 中我们可以让他自动加上
 
-1. 安装 npm i postcss-loader autoprefixer -D
+1. 安装依赖
+
+```
+npm i postcss-loader autoprefixer -D
+```
+
 2. 在项目根目录下新建 postcss.config.js 文件
 
 ```js
@@ -215,9 +220,11 @@ rules: [
 ]
 ```
 
+至此，一个 webpack 项目基本搭建而成，下面介绍 vue 的引用和项目优化。
+
 ## 搭建 vue 模块化开发环境
 
-#### 引入 vue 模块化
+### vue SPA
 
 1、搭建一个类似于 vue-cli 的脚手架，首先我们来依葫芦画瓢，在 main.js 写上一下代码
 
@@ -233,7 +240,7 @@ new Vue({
 2、然后在 src 文件夹下新建 APP.vue
 
 ```html
-<div id="app">app.vue根组件</div>
+<div id="app">SPA项目</div>
 ```
 
 3、安装相关依赖
@@ -265,7 +272,7 @@ module.exports = {
 }
 ```
 
-#### vue-router
+### vue-router
 
 1、安装依赖
 
@@ -311,13 +318,20 @@ new Vue({
 })
 ```
 
-就这样，一个类似于 vue-cli 的脚手架就搭建好了。
+就这样，一个类似于 vue-cli 的脚手架就搭建好了，你可以愉快地写.vue 文件进行 SPA 开发。
 
 ## webpack 优化打包
 
 #### 分离 css
 
-虽然 webpack 的理念是把 css、js 全都打包到一个文件里，但要是我们想把 css 分离出来，这里我们用到 mini-css-extract-plugin，在生产环境使用。
+虽然 webpack 的理念是把 css、js 全都打包到一个文件里，但要是我们想把 css 分离出来，这里我们用到 mini-css-extract-plugin。对比另一个插件 extract-text-webpack-plugin，它有以下优点:
+
+* 异步加载
+* 不重复编译，性能更好
+* 更容易使用
+* 只针对CSS
+
+但是 mini-css-extract-plugin 不支持 HMR，所以我们只能在生产环境使用它。
 
 1、安装依赖
 
@@ -325,7 +339,7 @@ new Vue({
 npm install mini-css-extract-plugin -D
 ```
 
-2、在 webpack 配置 loader 和 plugin
+2、在 webpack.prod.js 配置 loader 和 plugin
 
 ```js
 module: {
@@ -472,7 +486,7 @@ npm install image-webpack-loader -D
       loader: 'url-loader',
       options: {
         esModule: false,
-        limit: 1000,  // 限制只有小于1kb的图片才转为base64，例子图片为1.47kb,所以不会被转化
+        limit: 1000,  // 限制只有小于1kb的图片才转为base64
         outputPath: 'images', // 设置打包后图片存放的文件夹名称
         name: '[name][hash:8].[ext]'
       }
@@ -505,5 +519,27 @@ npm install image-webpack-loader -D
       }
     }
   ]
+}
+```
+
+#### gZip 加速优化
+
+所有现代浏览器都支持 gzip 压缩，启用 gzip 压缩可大幅缩减传输资源大小，从而缩短资源下载时间，减少首次白屏时间，提升用户体验。  
+
+gzip 对基于文本格式文件的压缩效果最好（如：CSS、JavaScript 和 HTML），在压缩较大文件时往往可实现高达 70-90% 的压缩率，对已经压缩过的资源（如：图片）进行 gzip 压缩处理，效果很不好。
+
+```js
+const CompressionPlugin = require('compression-webpack-plugin')
+configureWebpack: (config) => {
+  if (process.env.NODE_ENV === 'production') {
+    config.plugins.push(
+      new CompressionPlugin({
+        // gzip压缩配置
+        test: /\.js$|\.html$|\.css/, // 匹配文件名
+        threshold: 10240, // 对超过10kb的数据进行压缩
+        deleteOriginalAssets: false, // 是否删除原文件
+      })
+    )
+  }
 }
 ```
