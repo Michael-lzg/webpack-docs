@@ -1,18 +1,35 @@
 # 用 webpack 构建一个 vue 项目
 
-在这里，我们要做的事情包括
+### 前言
 
-- 搭建 webpack 项目框架
-- 搭建 vue 模块化开发环境
-- webpack 优化打包
+想必大多数人在开发 vue 等 SPA 项目都时候都会直接用 `vue-cli` 等脚手架开发，一是方便省去了好多配置上的功夫，二是 `vue-cli` 毕竟是久经考验较为成熟的东西，遇到问题也能在网上找到相应解决方案。
 
-你需要了解的基本知识
+但是，如果我们要更好地理解脚手架的配置及其构建打包的机制，我们就有必要从零开始，依葫芦画瓢自己配置一个类似于 vue-cli 这样的项目了。在此，我做了以下简单配置，请各位大佬批评指正，并诚心希望能得到大佬的指点，解决文章最后关于 `Tree Shaking` 导致打包缺失 css 的问题。
 
-- html，css，javascript
-- ES6 语法
-- webpack 核心属性
-- vue，vue-router
-- 前端模块化
+本文主要包括如下配置：
+
+* 区分环境变量及合并配置
+* `webpack-dev-server` 本地服务器 
+* `HtmlWebpackPlugin` 生成 html
+* `CleanWebpackPlugin` 清理文件夹
+* `loader` 及 `babel` 配置
+* `HotModuleReplacementPlugin` 热更新
+* `postcss-loader` 增加 css 前缀
+* `vue SPA` 引入及解析
+* `vue-router` 安装与使用
+* `mini-css-extract-plugin` 分离 css
+* `purifycss-webpack purify-css` 消除冗余 css
+* `optimize-css-assets-webpack-plugin` 压缩 css
+* `terser-webpack-plugin` 压缩 js
+* `splitChunks` 提取公共代码
+* `image-webpack-loader` 图片压缩
+* `gZip` 加速优化
+
+项目源码：https://github.com/Michael-lzg/webpack-vue-cli
+
+如果对 webpack 基本配置还不了解的小伙伴，可查看以下文章  
+[从零开始构建一个 webpack 项目](https://juejin.im/post/5db0fd1bf265da4d4216a9c5)  
+[搭建一个 vue-cli4+webpack 移动端框架（开箱即用）](https://juejin.im/post/5eb766296fb9a0432f0ff8c7#heading-19)
 
 废话不多说，老司机带你立刻上路。
 
@@ -20,7 +37,7 @@
 
 ### 构建项目结构
 
-1. 创建 webpack-vue-cli 文件夹，npm-init-y 初始化项目
+1. 创建 `webpack-vue-cli` 文件夹，`npm-init-y` 初始化项目
 
 2. 安装 webpack 相关依赖
 
@@ -28,7 +45,7 @@
 npm i webpack webpack-cli webpack-dev-server webpack-merge --save-dev
 ```
 
-如果 webpack 和 webpack-cli 没有全局安装的话，要先全局安装
+如果 `webpack` 和 `webpack-cli` 没有全局安装的话，要先全局安装
 
 3. 建立项目文件夹
 
@@ -42,7 +59,7 @@ npm i webpack webpack-cli webpack-dev-server webpack-merge --save-dev
 ├── webpack.prod.js   // 生产环境配置
 ```
 
-index.html 和 main.js 的代码不多说，直接进入 webpack 配置环节。
+`index.html` 和 `main.js` 的代码不多说，直接进入 webpack 配置环节。
 
 ### webpack 基本配置
 
@@ -52,7 +69,7 @@ index.html 和 main.js 的代码不多说，直接进入 webpack 配置环节。
 - webpack.dev.js 开发环境的配置文件
 - webpack.prod.js 生产环境的配置文件
 
-在 webpack.dev.js 和 webpack.prod.js，我们可以利用 webpack-merge 进行配置的合并。
+在 `webpack.dev.js` 和 `webpack.prod.js`，我们可以利用 `webpack-merge` 进行配置的合并。
 
 然后，我们在 package.json 定义不同环境的打包命令
 
@@ -65,7 +82,7 @@ index.html 和 main.js 的代码不多说，直接进入 webpack 配置环节。
 
 #### 公共配置
 
-我们先来看一下 webpack.base.js 的公共配置，定义好入口文件和出口文件
+我们先来看一下 `webpack.base.js` 的公共配置，定义好入口文件和出口文件
 
 ```js
 module.exports = {
@@ -81,7 +98,7 @@ module.exports = {
 
 #### webpack-dev-server
 
-webpack 提供了一个可选的本地开发服务器，这个本地服务器基于 node.js 构建，所以在 webpack.dev.js 进行配置
+webpack 提供了一个可选的本地开发服务器，这个本地服务器基于 `node.js` 构建，所以在 `webpack.dev.js` 进行配置
 
 ```js
 const merge = require('webpack-merge') // 引入webpack-merge功能模块
@@ -102,7 +119,7 @@ module.exports = merge(common, {
 
 #### HtmlWebpackPlugin
 
-HtmlWebpackPlugin 简化了 HTML 文件的创建，它可以根据 html 模板在打包后自动为你生产打包后的 html 文件。这对于在文件名中包含每次会随着编译而发生变化哈希的 webpack bundle 尤其有用。
+`HtmlWebpackPlugin` 简化了 HTML 文件的创建，它可以根据 html 模板在打包后自动为你生产打包后的 html 文件。这对于在文件名中包含每次会随着编译而发生变化哈希的`bundle`。
 
 ```js
 plugins: [
@@ -112,13 +129,13 @@ plugins: [
 ]
 ```
 
-至此就搭建好一个乞丐版的 webpack 项目了，你可以随意编写代码，分别在开发环境和生产环境执行命令查看效果。
+至此就搭建好一个乞丐版的 `webpack` 项目了，你可以随意编写代码，分别在开发环境和生产环境执行命令查看效果。
 
 ### loader 配置
 
-loader 可以让 webpack 能够去处理那些非 javaScript 文件（webpack 自身只理解 javaScript）。loader 可以将所有类型的文件转换为 webpack 能够处理的有效模块，然后你就可以利用 webpack 的打包能力，对它们进行处理。
+`loader` 可以让 `webpack` 能够去处理那些非 `javaScript` 文件（`webpack` 自身只理解 `javaScript`）。`loader` 可以将所有类型的文件转换为 webpack 能够处理的有效模块，然后你就可以利用 webpack 的打包能力，对它们进行处理。
 
-对于 loader 的科普和配置，在这里不做一一说明，直接奉上代码，分别是处理样式，js 和文件的 loader。
+对于 `loader` 的科普和配置，在这里不做一一说明，直接奉上代码，分别是处理样式，`js` 和文件的 `loader`。
 
 ```js
 module: {
@@ -148,7 +165,7 @@ module: {
 }
 ```
 
-为了更方便的配置和优化 babel-loader，我们可以将其提取出来，在根目录下新建.babelrc 文件
+为了更方便的配置和优化 `babel-loader`，我们可以将其提取出来，在根目录下新建 `.babelrc` 文件
 
 ```
 {
@@ -160,7 +177,7 @@ module: {
 
 #### CleanWebpackPlugin
 
-在每次构建前清理/dist 文件夹，生产最新的打包文件，这时候就用到 CleanWebpackPlugin 插件了。
+在每次构建前清理/dist 文件夹，生产最新的打包文件，这时候就用到 `CleanWebpackPlugin` 插件了。
 
 ```js
 plugins: [
@@ -173,11 +190,11 @@ plugins: [
 
 #### HotModuleReplacementPlugin
 
-HotModuleReplacementPlugin（HMR）是一个很实用的插件，可以在我们修改代码后自动刷新预览效果，在开发环境使用。
+`HotModuleReplacementPlugin`（HMR）是一个很实用的插件，可以在我们修改代码后自动刷新预览效果，在开发环境使用。
 
-1. devServer 配置项中设置 hot: true
+1. `devServer` 配置项中设置 `hot: true`
 
-2. HotModuleReplacementPlugin 是 webpack 模块自带的，所以引入 webpack 后，在 plugins 配置项中直接使用即可。
+2. `HotModuleReplacementPlugin` 是 webpack 模块自带的，所以引入 webpack 后，在 `plugins` 配置项中直接使用即可。
 
 ```js
 plugins: [
@@ -187,7 +204,7 @@ plugins: [
 
 #### 增加 css 前缀
 
-平时我们写 css 时，一些属性需要手动加上前缀，比如-webkit-border-radius: 10px;，在 webpack 中我们可以让他自动加上
+平时我们写 css 时，一些属性需要手动加上前缀，比如`-webkit-border-radius: 10px;`，在 webpack 中我们可以让他自动加上
 
 1. 安装依赖
 
@@ -195,7 +212,7 @@ plugins: [
 npm i postcss-loader autoprefixer -D
 ```
 
-2. 在项目根目录下新建 postcss.config.js 文件
+2. 在项目根目录下新建 `postcss.config.js` 文件
 
 ```js
 module.exports = {
@@ -226,7 +243,7 @@ rules: [
 
 ### vue SPA
 
-1、搭建一个类似于 vue-cli 的脚手架，首先我们来依葫芦画瓢，在 main.js 写上一下代码
+1、搭建一个类似于 `vue-cli` 的脚手架，首先我们来依葫芦画瓢，在 `main.js` 写上一下代码
 
 ```js
 import Vue from 'vue'
@@ -237,7 +254,7 @@ new Vue({
 })
 ```
 
-2、然后在 src 文件夹下新建 APP.vue
+2、然后在 src 文件夹下新建 `APP.vue`
 
 ```html
 <div id="app">SPA项目</div>
@@ -245,7 +262,7 @@ new Vue({
 
 3、安装相关依赖
 
-到这里，我们 npm run dev 试一下就报错了。因为我们没有安装相关依赖，下面我们下来安装一下依赖
+到这里，我们 `npm run dev` 试一下就报错了。因为我们没有安装相关依赖，下面我们下来安装一下依赖
 
 ```
 npm install vue vue-loader vue-template-compiler -D
@@ -318,20 +335,20 @@ new Vue({
 })
 ```
 
-就这样，一个类似于 vue-cli 的脚手架就搭建好了，你可以愉快地写.vue 文件进行 SPA 开发。
+就这样，一个类似于 `vue-cli` 的脚手架就搭建好了，你可以愉快地写 `.vue` 文件进行 SPA 开发。
 
 ## webpack 优化打包
 
 #### 分离 css
 
-虽然 webpack 的理念是把 css、js 全都打包到一个文件里，但要是我们想把 css 分离出来，这里我们用到 mini-css-extract-plugin。对比另一个插件 extract-text-webpack-plugin，它有以下优点:
+虽然 webpack 的理念是把 css、js 全都打包到一个文件里，但要是我们想把 css 分离出来，这里我们用到 `mini-css-extract-plugin`。对比另一个插件 `extract-text-webpack-plugin`，它有以下优点:
 
-* 异步加载
-* 不重复编译，性能更好
-* 更容易使用
-* 只针对CSS
+- 异步加载
+- 不重复编译，性能更好
+- 更容易使用
+- 只针对 CSS
 
-但是 mini-css-extract-plugin 不支持 HMR，所以我们只能在生产环境使用它。
+但是`mini-css-extract-plugin` 不支持 `HMR`，所以我们只能在生产环境使用它。
 
 1、安装依赖
 
@@ -339,7 +356,7 @@ new Vue({
 npm install mini-css-extract-plugin -D
 ```
 
-2、在 webpack.prod.js 配置 loader 和 plugin
+2、在`webpack.prod.js` 配置 `loader` 和 `plugin`
 
 ```js
 module: {
@@ -368,7 +385,7 @@ plugins: [
 ]
 ```
 
-分离 css 需要将 css loader 中的 style-loader 替换为 MiniCssExtractPlugin
+分离 css 需要将 `css loader` 中的 `style-loader` 替换为 `MiniCssExtractPlugin`
 
 #### 消除冗余 css
 
@@ -398,7 +415,7 @@ module.exports = merge(common, {
 
 #### 压缩 css
 
-我们希望减小 css 打包后的体积，可以用到 optimize-css-assets-webpack-plugin。
+我们希望减小 css 打包后的体积，可以用到 `optimize-css-assets-webpack-plugin`。
 1、安装依赖
 
 ```
@@ -419,7 +436,7 @@ optimization: {
 
 #### 压缩 js
 
-Webpack4.0 默认是使用 terser-webpack-plugin 这个压缩插件，在此之前是使用 uglifyjs-webpack-plugin，两者的区别是后者对 ES6 的压缩不是很好，同时我们可以开启 parallel 参数，使用多进程压缩，加快压缩。
+Webpack4.0 默认是使用 `terser-webpack-plugin` 这个压缩插件，在此之前是使用 `uglifyjs-webpack-plugin`，两者的区别是后者对 ES6 的压缩不是很好，同时我们可以开启 `parallel` 参数，使用多进程压缩，加快压缩。
 
 1、安装依赖
 
@@ -447,7 +464,7 @@ optimization: {
 
 #### 提取公共代码
 
-在用 webpack 打包的时候，对于一些不经常更新的第三方库，比如 vue 全家桶的一些东西， 我们希望能和自己的代码分离开。webpack4 使用 splitChunks 的方法进行配置。
+在用 webpack 打包的时候，对于一些不经常更新的第三方库，比如 vue 全家桶的一些东西， 我们希望能和自己的代码分离开。webpack4 使用 `splitChunks` 的方法进行配置。
 
 ```js
 optimization: {
@@ -468,7 +485,7 @@ optimization: {
 
 #### 图片压缩
 
-在项目中有些图片太大影响加载，我们用 image-webpack-loader 进行压缩。
+在项目中有些图片太大影响加载，我们用 `image-webpack-loader` 进行压缩。
 
 1、安装依赖
 
@@ -524,7 +541,7 @@ npm install image-webpack-loader -D
 
 #### gZip 加速优化
 
-所有现代浏览器都支持 gzip 压缩，启用 gzip 压缩可大幅缩减传输资源大小，从而缩短资源下载时间，减少首次白屏时间，提升用户体验。  
+所有现代浏览器都支持 `gzip` 压缩，启用 `gzip` 压缩可大幅缩减传输资源大小，从而缩短资源下载时间，减少首次白屏时间，提升用户体验。
 
 gzip 对基于文本格式文件的压缩效果最好（如：CSS、JavaScript 和 HTML），在压缩较大文件时往往可实现高达 70-90% 的压缩率，对已经压缩过的资源（如：图片）进行 gzip 压缩处理，效果很不好。
 
@@ -543,3 +560,19 @@ configureWebpack: (config) => {
   }
 }
 ```
+
+### tree-shaking（求助，生产环境打包生成不了样式）
+
+按以上的方式构建项目，在开发环境一直都是顺顺利利的，然而一执行 `npm run build`，打开页面，发现样式全都缺失了。打开 `dist/css` 文件夹，发现三个 css 文件，只有 `index.css` 有部分文件（是 main.js 引入额初始化样式，但也是不全的），另外两个 css 文件则是空空如也，也就是.vue 里面的样式全都缺失了。
+
+查看资源，初步判断为 webpack4 默认使用 `tree-shaking`，会把 **在模块的层面上做到打包后的代码只包含被引用并被执行的模块，而不被引用或不被执行的模块被删除掉，以起到减包的效果**。但是我已经按相关资源在 `package.json` 配置了 `sideEffects` 了，但是还是没用，实在苦恼！！！
+
+```js
+"sideEffects": [
+    "*.less",
+    "*.css",
+    "*.vue"
+  ]
+```
+
+在此求助于各位大佬，如有遇过类似问题或者知道解决方法的，请不吝赐教，小弟不胜感激！！！

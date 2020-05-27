@@ -50,6 +50,7 @@ module.exports = {
             'advanced/webpack的打包机制',
             'advanced/热更新原理',
             'advanced/webpack插件原理',
+            'advanced/Tree Shaking',
             'advanced/从零构建一个wbpack项目',
             'advanced/用webpack构建一个vue项目',
             'advanced/移动端开发模板',
