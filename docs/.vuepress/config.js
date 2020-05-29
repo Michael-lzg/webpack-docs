@@ -51,11 +51,18 @@ module.exports = {
             'advanced/热更新原理',
             'advanced/webpack插件原理',
             'advanced/Tree Shaking',
-            'advanced/从零构建一个wbpack项目',
-            'advanced/用webpack构建一个vue项目',
-            'advanced/移动端开发模板',
-            'advanced/webpack优化打包大全',
-            'advanced/webpack-chain',
+            'advanced/DllPlugin',
+          ]
+        },
+        {
+          title: 'webpack应用篇',
+          collapsable: false,
+          children: [
+            'application/从零构建一个wbpack项目',
+            'application/用webpack构建一个vue项目',
+            'application/移动端开发模板',
+            'application/webpack优化打包大全',
+            'application/webpack-chain',
           ]
         },
       ]
