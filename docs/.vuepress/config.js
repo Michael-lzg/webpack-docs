@@ -24,6 +24,7 @@ module.exports = {
           collapsable: false,
           children: [
             'fonted/前端模块化',
+            'fonted/前端工程化',
             'fonted/glup',
             'fonted/webpack4.0',
           ]
