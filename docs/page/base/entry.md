@@ -17,6 +17,13 @@ webpack 应该使用哪个模块做为入口文件，来作为构建其内部依
 module.exports = {
   entry: './src/index.js',
 }
+
+// 它是下面的简写：
+module.exports = {
+  entry: {
+    main: './index.js',
+  },
+}
 ```
 
 多⼊⼝：entry 是⼀个对象
@@ -38,11 +45,11 @@ module.exports = {
 
 ```js
 module.exports = {
-    entry: './src/index.js',
-    output: {
-        filename: 'bundle.js’,
-        path: __dirname + '/dist'
-    }
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.js’,
+    path: __dirname + '/dist'
+  }
 };
 ```
 
@@ -112,17 +119,19 @@ import demo from 'demo'
 demo()
 ```
 
-为什么这个类库能支持不同方式的引入？如何实现的？这就是 webpack 配置output.library和output.libraryTarget提供的功能。  
+为什么这个类库能支持不同方式的引入？如何实现的？这就是 webpack 配置 output.library 和 output.libraryTarget 提供的功能。
 
-output.libraryTarget一共支持的值：
+output.libraryTarget 一共支持的值：
 
-* var: 当库被加载时，那么库的返回值会被分配到使用用var申明的变量上
-* assign: 把库返回值分配给一个没使用var申明的变量中，如果这个变量没有在引入作用域中提前申明过，那么将会挂载在全局作用域中。
-* this: 将库的返回值分配给this对象的由output.library指定的属性。其中this的意义由用户决定。
-* window: 将库的返回值分配给window对象的由output.library指定的属性。
-* global: 将库的返回值分配给global对象的由output.library指定的属性。
-* commonjs: 将库的返回值分配给exports对象的由output.library指定的属性。
-* commonjs2: 将库的返回值分配给module.exports
-* amd: 这个选项会把库作为 AMD 模块导出。 
-* umd: 这个选项会尝试把库暴露给前使用的模块定义系统，这使其和CommonJS、AMD兼容或者暴露为全局变量。 
-* jsonp: 这个方法会使用 jsonp 的方式把结果包裹起来。 
+- var: 当库被加载时，那么库的返回值会被分配到使用用 var 申明的变量上
+- assign: 把库返回值分配给一个没使用 var 申明的变量中，如果这个变量没有在引入作用域中提前申明过，那么将会挂载在全局作用域中。
+- this: 将库的返回值分配给 this 对象的由 output.library 指定的属性。其中 this 的意义由用户决定。
+- window: 将库的返回值分配给 window 对象的由 output.library 指定的属性。
+- global: 将库的返回值分配给 global 对象的由 output.library 指定的属性。
+- commonjs: 将库的返回值分配给 exports 对象的由 output.library 指定的属性。
+- commonjs2: 将库的返回值分配给 module.exports
+- amd: 这个选项会把库作为 AMD 模块导出。
+- umd: 这个选项会尝试把库暴露给前使用的模块定义系统，这使其和 CommonJS、AMD 兼容或者暴露为全局变量。
+- jsonp: 这个方法会使用 jsonp 的方式把结果包裹起来。
+
+

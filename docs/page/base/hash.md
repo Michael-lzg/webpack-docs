@@ -76,3 +76,13 @@ module: {
   ]
 }
 ```
+
+### Module、Chunk和Bundle
+
+* module：我们写的源码，无论是commonjs还是amdjs，都可以理解为一个个的module
+* chunk：当我们写的module源文件传到webpack进行打包时，webpack会根据文件引用关系生成chunk文件，webpack 会对这些chunk文件进行一些操作
+* bundle：webpack处理好chunk文件后，最后会输出bundle文件，这个bundle文件包含了经过加载和编译的最终源文件，所以它可以直接在浏览器中运行。
+
+我们通过下面一张图更深入的理解这三个概念：
+
+<img src="../img/chunk.png">

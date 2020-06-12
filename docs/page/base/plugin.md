@@ -16,7 +16,7 @@
 
 - plugin 是一个扩展器，它丰富了 webpack 本身，针对是 loader 结束后，webpack 打包的整个过程，它并不直接操作文件，而是基于事件机制工作，会监听 webpack 打包过程中的某些节点，执行广泛的任务。
 
-### HotModuleReplacementPlugin
+## HotModuleReplacementPlugin
 
 模块热更新插件。`Hot-Module-Replacement` 的热更新是依赖于 `webpack-dev-server`，后者是在打包文件改变时更新打包文件或者 reload 刷新整个页面，`HRM` 是只更新修改的部分。
 
@@ -30,7 +30,7 @@ plugins: [
 ]
 ```
 
-### html-webpack-plugin
+## html-webpack-plugin
 
 生成 html 文件。将 webpack 中`entry`配置的相关入口 `chunk` 和 `extract-text-webpack-plugin`抽取的 css 样式 插入到该插件提供的`template`或者`templateContent`配置项指定的内容基础上生成一个 html 文件，具体插入方式是将样式`link`插入到`head`元素中，`script`插入到`head`或者`body`中。
 
@@ -115,9 +115,9 @@ module.exports = {
 
 这样执行 npm run build，可以看到 index.html 中仅引入了 index 的 js 文件，而 login.html 中也仅引入了 login 的 js 文件。
 
-### clean-webpack-plugin
+## clean-webpack-plugin
 
-在每次构建前清理/dist 文件夹，是比较推荐的做法，因此只会生成用到的文件，这时候就用到 CleanWebpackPlugin 插件了。
+clean-webpack-plugin 用于在打包前清理上一次项目生成的 bundle 文件，它会根据 output.path 自动清理文件夹；这个插件在生产环境用的频率非常高，因为生产环境经常会通过 hash 生成很多 bundle 文件，如果不进行清理的话每次都会生成新的，导致文件夹非常庞大。
 
 ```js
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -130,7 +130,7 @@ plugins: [
 ]
 ```
 
-### extract-text-webpack-plugin
+## extract-text-webpack-plugin
 
 将 css 成生文件，而非内联 。该插件的主要是为了抽离 css 样式,防止将样式打包在 js 中引起页面样式加载错乱的现象
 
@@ -143,7 +143,7 @@ plugins: [
 ]
 ```
 
-### mini-css-extract-plugin
+## mini-css-extract-plugin
 
 将 CSS 提取为独立的文件的插件，对每个包含 css 的 js 文件都会创建一个 CSS 文件，支持按需加载 css 和 sourceMap。只能用在 webpack4 中，对比另一个插件 extract-text-webpack-plugin 有以下特点:
 
@@ -185,7 +185,7 @@ module.exports = {
 }
 ```
 
-### purifycss-webpack
+## purifycss-webpack
 
 有时候我们 css 写得多了或者重复了，这就造成了多余的代码，我们希望在生产环境进行去除。
 
@@ -203,7 +203,7 @@ module.exports = merge(common, {
 })
 ```
 
-### optimize-css-assets-webpack-plugin
+## optimize-css-assets-webpack-plugin
 
 我们希望减小 css 打包后的体积，可以用到 optimize-css-assets-webpack-plugin。
 
@@ -217,7 +217,7 @@ optimization: {
   ]
 ```
 
-### UglifyJsPlugin
+## UglifyJsPlugin
 
 uglifyJsPlugin 是 vue-cli 默认使用的压缩代码方式，用来对 js 文件进行压缩，从而减小 js 文件的大小，加速 load 速度。它使用的是单线程压缩代码，打包时间较慢，所以可以在开发环境将其关闭，生产环境部署时再把它打开。
 
@@ -236,7 +236,7 @@ plugins: [
   })
 ```
 
-### ParallelUglifyPlugin
+## ParallelUglifyPlugin
 
 开启多个子进程，把对多个文件压缩的工作分别给多个子进程去完成，每个子进程其实还是通过 UglifyJS 去压缩代码，但是变成了并行执行。
 
@@ -260,7 +260,7 @@ plugins: [
 ]
 ```
 
-### terser-webpack-plugin
+## terser-webpack-plugin
 
 Webpack4.0 默认是使用 terser-webpack-plugin 这个压缩插件，在此之前是使用 uglifyjs-webpack-plugin，两者的区别是后者对 ES6 的压缩不是很好，同时我们可以开启 parallel 参数，使用多进程压缩，加快压缩。
 
@@ -278,7 +278,7 @@ optimization: {
 }
 ```
 
-### NoErrorsPlugin
+## NoErrorsPlugin
 
 报错但不退出 webpack 进程。编译出现错误时，使用 NoEmitOnErrorsPlugin 来跳过输出阶段。这样可以确保输出资源不会包含错误。
 
@@ -286,7 +286,7 @@ optimization: {
 plugins: [new webpack.NoEmitOnErrorsPlugin()]
 ```
 
-### compression-webpack-plugin
+## compression-webpack-plugin
 
 所有现代浏览器都支持 gzip 压缩，启用 gzip 压缩可大幅缩减传输资源大小，从而缩短资源下载时间，减少首次白屏时间，提升用户体验。
 
@@ -307,7 +307,7 @@ plugins: [
 
 当然，这个方法还需要后端配置支持。
 
-### DefinePlugin
+## DefinePlugin
 
 我们可以通过 `DefinePlugin` 可以定义一些全局的变量，我们可以在模块当中直接使用这些变量，无需作任何声明，`DefinePlugin` 是 `webpack` 自带的插件。
 
@@ -322,7 +322,7 @@ plugins: [
 console.log(DESCRIPTION)
 ```
 
-### ProvidePlugin
+## ProvidePlugin
 
 自动加载模块。 任何时候，当 identifier 被当作未赋值的变量时， module 就会自动被加载，并且 identifier 会被这个 module 输出的内容所赋值。这是 webpack 自带的插件。
 
@@ -343,7 +343,7 @@ module.exports = {
 }
 ```
 
-### DLLPlugin
+## DLLPlugin
 
 这是在一个额外的独立的 webpack 设置中创建一个只有 dll 的 `bundle(dll-only-bundle)`。 这个插件会生成一个名为 manifest.json 的文件，这个文件是用来让 `DLLReferencePlugin` 映射到相关的依赖上去的。
 
@@ -415,7 +415,7 @@ new webpack.DllReferencePlugin({
 <script type="text/javascript" src="./vendor.dll.js"></script>
 ```
 
-### HappyPack
+## HappyPack
 
 `HappyPack` 能让 webpack 把任务分解给多个子进程去并发的执行，子进程处理完后再把结果发送给主进程。要注意的是 `HappyPack` 对 `file-loader`、`url-loader` 支持的不友好，所以不建议对该 loader 使用。
 
@@ -472,6 +472,27 @@ plugins: [
 ```
 
 **注意，当项目较小时，多线程打包反而会使打包速度变慢。**
+
+## copy-webpack-plugin
+
+我们在 public/index.html 中引入了静态资源，但是打包的时候 webpack 并不会帮我们拷贝到 dist 目录，因此 copy-webpack-plugin 就可以很好地帮我做拷贝的工作了。
+
+```js
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+module.exports = {
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'public/js/*.js',
+          to: path.resolve(__dirname, 'dist', 'js'),
+          flatten: true,
+        },
+      ],
+    }),
+  ],
+}
+```
 
 ### 开发一个插件
 
