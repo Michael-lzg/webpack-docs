@@ -494,6 +494,36 @@ module.exports = {
 }
 ```
 
+## IgnorePlugin
+
+这是 webpack 内置插件，它的作用是：忽略第三方包指定目录，让这些指定目录不要被打包进去。
+
+比如我们要使用 moment 这个第三方依赖库，该库主要是对时间进行格式化，并且支持多个国家语言。虽然我设置了语言为中文，但是在打包的时候，是会将所有语言都打包进去的。这样就导致包很大，打包速度又慢。对此，我们可以用 IgnorePlugin 使得指定目录被忽略，从而使得打包变快，文件变小。
+
+```js
+const Webpack = require('webpack')
+plugins: [
+  //moment这个库中，如果引用了./locale/目录的内容，就忽略掉，不会打包进去
+  new Webpack.IgnorePlugin(/\.\/locale/, /moment/),
+]
+```
+
+我们虽然按照上面的方法忽略了包含’./locale/'该字段路径的文件目录，但是也使得我们使用的时候不能显示中文语言了，所以这个时候可以手动引入中文语言的目录。
+
+```js
+import moment from 'moment'
+
+//手动引入所需要的语言包
+import 'moment/locale/zh-cn'
+
+moment.locale('zh-cn')
+
+let r = moment().endOf('day').fromNow()
+console.log(r)
+```
+
+这样就 OK 了。既能够显示中文，又把不必要的语言包都忽略打包了
+
 ### 开发一个插件
 
 举个例子
