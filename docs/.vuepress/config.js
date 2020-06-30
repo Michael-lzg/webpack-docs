@@ -3,7 +3,7 @@ module.exports = {
   base: '/webpack-docs/',
   repo: 'https://github.com/Michael-lzg/webpack-docs',
   description: '讲解webpack相关知识点', //描述
-  port: 3000, //端口
+  port: 3333, //端口
   themeConfig: { //主题配置
     // 添加导航栏
     nav: [

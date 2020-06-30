@@ -101,3 +101,7 @@ chainWebpack: (config) => {
   config.plugins.delete('preload')
 }
 ```
+
+### 参考文献
+
+[webpack-chain](https://github.com/Yatoo2018/webpack-chain/tree/zh-cmn-Hans)  
