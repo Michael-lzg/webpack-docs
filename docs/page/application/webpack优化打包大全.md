@@ -126,6 +126,77 @@ import(/* webpackPrefetch: true */ './someAsyncComponent.vue')
 
 ## 2、缩小构建目标
 
+#### 配置别名 alias
+
+alias 的意思为 别名，能把原导入路径映射成一个新的导入路径，我们可以使用 alias 配置来减少查找过程。
+
+```javascript
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
+    }
+  },
+```
+
+#### 合理使用 resolve.extensions
+
+在导入语句没带文件后缀时，Webpack 会自动带上后缀后去尝试询问文件是否存在，查询的顺序是按照我们配置 的 resolve.extensions 顺序从前到后查找，Webpack 默认支持的后缀是 js 与 json。
+
+```js
+{
+  resolve: {
+    extensions: ['.js', '.json']
+  }
+}
+```
+
+我们在require('./utils')时，Webpack先匹配utils.js，匹配不到再去匹配utils.json，如果还找不到就报错。  
+
+因此extensions数组越长，或者正确后缀的文件越靠后，匹配的次数越多也就越耗时，因此我们可以从以下几点来优化：
+
+* extensions数组尽量少，项目中不存在的文件后缀不要列进去
+* 出现频率比较高的文件后缀优先放到最前面
+* 在代码中导入文件的时候，要尽量把后缀名带上，避免查找
+
+
+#### 使用 module.noParse:
+
+如果一些第三方模块没有使用 AMD/CommonJs 规范，可以使用`noParse`来标记这个模块，这样 Webpack 在导入模块时，就不进行解析和转换，提升 Webpack 的构建速度。 因为如 `jQuery` 、`echart` 等库庞大又没有采用模块化标准，让 webpack 去解析这些文件耗时又没有意义。`noParse`可以接受一个正则表达式或者一个函数：
+
+```js
+module: {
+  //noParse: /jquery|lodash|chartjs/,
+  noParse: function(content){
+    return /jquery|lodash|chartjs/.test(content)
+  }
+}
+```
+
+#### 优化 resolve.mainFields 配置
+
+mainFields 用来告诉 webpack 使用第三方模块中的哪个字段来导入模块；第三方模块中都会有一个 package.json 文件用来描述这个模块的一些属性，比如模块名(name)、版本号(version)、作者(auth)等等；其中最重要的就是有多个特殊的字段用来告诉 webpack 导入文件的位置，有多个字段的原因是因为有些模块可以同时用于多个环境，而每个环境可以使用不同的文件。  
+
+mainFields 的默认值和当前 webpack 配置的 target 属性有关：
+
+* 如果 target 为 webworker 或 web（默认），mainFields 默认值为["browser", "module", "main"]
+* 如果 target 为其他（包括 node），mainFields 默认值为["module", "main"]
+
+这就是说当我们 require('vue')的时候，webpack 先去 vue 下面搜索 browser 字段，没有找到再去搜索 module 字段，最后搜索 main 字段。  
+
+为了减少搜索的步骤，在明确第三方模块入口文件描述字段时，我们可以将这个字段设置尽量少；一般第三方模块都采用 main 字段，因此我们可以这样配置：
+
+```js
+{
+  resolve: {
+    mainFields: ["main"],
+  }
+}
+```
+
+## 3、合理使用缓存
+
 #### 优化 loader 配置
 
 排除 Webpack 不需要解析的模块，即使用 loader 的时候，在尽量少的模块中去使用。
@@ -146,36 +217,49 @@ module: {
 }
 ```
 
-注意：保存和读取这些缓存文件会有一些时间开销，所以请只对性能开销较大的 loader 使用此 loader。
+注意：保存和读取这些缓存文件会有一些时间开销，所以请只对性能开销较大的 loader 使用此 loader。  
 
-#### 合理使用 resolve.extensions
+#### cache-loader缓存
 
-在导入语句没带文件后缀时，Webpack 会自动带上后缀后去尝试询问文件是否存在，查询的顺序是按照我们配置 的 resolve.extensions 顺序从前到后查找，Webpack 默认支持的后缀是 js 与 json。
-
-#### 配置别名 alias
-
-alias 的意思为 别名，能把原导入路径映射成一个新的导入路径，我们可以使用 alias 配置来减少查找过程。
-
-```javascript
-  resolve: {
-    extensions: ['.js', '.vue', '.json'],
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
-    }
-  },
-```
-
-#### 使用 module.noParse:
-
-让 webpack 忽略对部分没采用模块化的文件的递归解析处理，这样做的好处是能提高构建性能。 因为如 `jQuery` 、`echart` 等库庞大又没有采用模块化标准，让 webpack 去解析这些文件耗时又没有意义。
+cache-loader可以将一些对性能消耗比较大的loader生产的结果缓存在磁盘中，等下次再次打包时如果是相同的代码就可以直接读取缓存，减少性能消耗。
 
 ```js
-module:{
-	noParse:/jquery/,//不去解析jquery中的依赖库
-  ...
-},
+rules: [
+  {
+    test: /\.js/,
+    use: [
+      {
+        loader: 'cache-loader'
+      },
+      {
+        loader: "babel-loader",
+      },
+    ],
+  },
+]
 ```
+
+注意：保存和读取缓存也会产生额外的性能开销，因此cache-loader适合用于对性能消耗较大的loader，否则反而会增加性能消耗
+
+#### HardSourceWebpackPlugi 缓存
+
+HardSourceWebpackPlugin 为模块提供了中间缓存，缓存默认的存放路径是: node_modules/.cache/hard-source。  
+
+配置 hard-source-webpack-plugin后，首次构建时间并不会有太大的变化，但是从第二次开始，构建时间大约可以减少 80%左右。
+
+```js
+// webpack.config.js
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new HardSourceWebpackPlugin()
+  ]
+}
+```
+
+
+
 
 ## 4、生产环境关闭 sourceMap
 
@@ -331,7 +415,7 @@ module.exports = {
 
 #### DLLPlugin
 
-webpack.DllPlugin 就是来解决这个问题的插件，使用它可以在第一次编译打包后就生成一份不变的代码供其他模块引用，这样下一次构建的时候就可以节省开发时编译打包的时间。
+DLL就是把我们用到的模块抽离出来，打包到单独的动态链接库中去，一个动态链接库中可以有多个模块；当我们在多个页面中用到某一个模块时，不再重复打包，而是直接去引入动态链接库中的模块。
 
 1、在 build 下创建 `webpack.dll.config.js`
 
