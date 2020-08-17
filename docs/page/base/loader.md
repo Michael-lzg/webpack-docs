@@ -1,12 +1,13 @@
 # Loader
 
-`loader` 让 `webpack` 能够去处理那些非 `javaScript` 文件（`webpack` 自身只理解 `javaScript`）。`loader` 可以将所有类型的文件转换为 `webpack` 能够处理的有效模块，然后你就可以利用 `webpack` 的打包能力，对它们进行处理。
+`loader` 让 `webpack` 能够去处理那些非 js 文件（`webpack` 自身只理解 `javaScript`）。遇到非 js 结尾的模块，webpack 会去 module 中找相应的规则，匹配到了对于的规则，然后去求助于对应的 loader
 
 ### loader 的特点
 
 1. 一个 Loader 的职责是单一的，只需要完成一种转换。
 
 2. 一个 Loader 其实就是一个 Node.js 模块，这个模块需要导出一个函数
+
 ```js
 module.exports = function (content) {
   return content && content.replace(/kobe/gi, 'Black Mamba')
@@ -23,9 +24,9 @@ webpack 里面的 compose 代码如下：
 const compose = (...fns) => {
   return fns.reduce(
     (prevFn, nextFn) => {
-      return value => nextFn(prevFn(value))
+      return (value) => nextFn(prevFn(value))
     },
-    value => value
+    (value) => value
   )
 }
 ```
@@ -182,11 +183,11 @@ rules: [
           // 开启 webp，会把 jpg 和 png 图片压缩为 webp 格式
           webp: {
             quality: 75,
-          }
-        }
-      }
-    ]
-  }
+          },
+        },
+      },
+    ],
+  },
 ]
 ```
 

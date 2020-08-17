@@ -308,3 +308,6 @@ Babel 团队为了方便，将同属 ES2015 几十个 Transform Plugins 集合�
   ]
 }
 ```
+
+### 参考文献
+[import、require、export、module.exports 混合使用详解](https://juejin.im/post/6844903520865386510)

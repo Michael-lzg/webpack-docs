@@ -10,18 +10,30 @@
 
 ### JS 使用 chunkhash
 
+跟打包的chunk有关，具体来说webpack是根据入口entry配置文件来分析其依赖项并由此来构建该entry的chunk，并生成对应的hash值。不同的chunk会有不同的hash值。 
+
 设置 output 的 filename，使⽤ [chunkhash]
 
 ```js
 output: {
-    filename: '[name][chunkhash:8].js',
-    path: __dirname + '/dist'
+  filename: '[name][chunkhash:8].js',
+  path: __dirname + '/dist'
 }
 ```
 
-注意: chunkhash 无法和热更新一起使用
+**注意: chunkhash 无法和热更新一起使用。** 
+
+在生产环境中，我们会把第三方或者公用类库进行单独打包，所以不改动公共库的代码，该chunk的hash就不会变，可以合理的使用浏览器缓存了。  
+
+但是这个中hash的方法其实是存在问题的，生产环境中我们会用webpack的插件，将css代码打单独提取出来打包。这时候chunkhash的方式就不够灵活，因为只要同一个chunk里面的js修改后，css的chunk的hash也会跟随着改动。因此我们需要contenthash。
+
 
 ### CSS 使用 contenthash
+
+contenthash表示由文件内容产生的hash值，内容不同产生的contenthash值也不一样。生产环境中，通常做法是把项目中css都抽离出对应的css文件来加以引用。  
+
+对于webpack，旧版本而言，即便每次你npm run build，内容不做修改的话，contenthash值还是会有所改变。
+
 
 设置 MiniCssExtractPlugin 的 filename，使⽤ [contenthash]
 
