@@ -1,4 +1,4 @@
-# webpack-dev-derver
+# webpack-dev-Server
 
 webpack 提供了一个可选的本地开发服务器，这个本地服务器基于 node.js 构建，它是一个单独的组件，在 webpack 中进行配置之前需要单独安装它作为项目依赖。
 
