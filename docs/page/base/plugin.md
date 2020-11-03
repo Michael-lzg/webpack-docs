@@ -217,6 +217,14 @@ optimization: {
   ]
 ```
 
+optimize-css-assets-webpack-plugin 这个插件默认使用了 cssnano 来作 css 优化，
+所以它不仅压缩了代码、删掉了代码中无用的注释、还去除了冗余的 css、优化了 css 的书写顺序，优化了你的代码，大大减小了你 css 的文件大小。
+
+```css
+margin: 10px 20px 10px 20px;
+=>margin: 10px 20px;
+```
+
 ## UglifyJsPlugin
 
 uglifyJsPlugin 是 vue-cli 默认使用的压缩代码方式，用来对 js 文件进行压缩，从而减小 js 文件的大小，加速 load 速度。它使用的是单线程压缩代码，打包时间较慢，所以可以在开发环境将其关闭，生产环境部署时再把它打开。

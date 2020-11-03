@@ -1,6 +1,8 @@
 # optimization
 
-optimization 是 webpack4 新增的，主要是用来让开发者根据需要自定义一些优化构建打包的策略配置，
+optimization 是 webpack4 新增的，主要是用来让开发者根据需要自定义一些优化构建打包的策略配置。
+
+webpack4 的Code Splitting 它最大的特点就是配置简单，如果你的 mode 是 production，那么 webpack4 就会自动开启 Code Splitting。
 
 - minimize：true/false,告诉 webpack 是否开启代码最小化压缩，
 - minimizer：自定 js 优化配置，会覆盖默认的配置，结合 UglifyJsPlugin 插件使用，
@@ -88,3 +90,6 @@ module.exports = {
   },
 }
 ```
+
+### 参考文献
+[手摸手，带你用合理的姿势使用webpack4（下）](https://segmentfault.com/a/1190000015919928)
