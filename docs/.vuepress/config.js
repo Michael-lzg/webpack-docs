@@ -50,6 +50,7 @@ module.exports = {
           children: [
             'advanced/webpack的打包机制',
             'advanced/热更新原理',
+            'advanced/异步加载原理',
             'advanced/webpack插件原理',
             'advanced/Tree Shaking',
             'advanced/DllPlugin',
