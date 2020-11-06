@@ -64,6 +64,7 @@ module.exports = {
             'application/移动端开发模板',
             'application/webpack优化打包大全',
             'application/webpack-chain',
+            'application/vue-ssr服务端渲染',
           ]
         },
       ]
