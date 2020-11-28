@@ -226,8 +226,107 @@ Compilation 上暴露的一些常用的钩子：
 <img src="../img/compilation.png">
 
 Compiler 和 Compilation 的区别
-* Compiler 代表了整个 Webpack 从启动到关闭的生命周期
-* Compilation 只是代表了一次新的编译，只要文件有改动，compilation就会被重新创建。
+
+- Compiler 代表了整个 Webpack 从启动到关闭的生命周期
+- Compilation 只是代表了一次新的编译，只要文件有改动，compilation 就会被重新创建。
+
+### 手写插件 1：文件清单
+
+在每次 webpack 打包之后，自动产生一个一个 markdown 文件清单，记录打包之后的文件夹 dist 里所有的文件的一些信息。
+
+思路：
+
+1. 通过 compiler.hooks.emit.tapAsync()来触发生成资源到 output 目录之前的钩子
+2. 通过 compilation.assets 获取文件数量
+3. 定义 markdown 文件的内容，将文件信息写入 markdown 文件内
+4. 给 dist 文件夹里添加一个资源名称为 fileListName 的变量
+5. 写入资源的内容和文件大小
+6. 执行回调，让 webpack 继续执行
+
+```js
+class FileListPlugin {
+  constructor(options) {
+    // 获取插件配置项
+    this.filename = options && options.filename ? options.filename : 'FILELIST.md'
+  }
+
+  apply(compiler) {
+    // 注册 compiler 上的 emit 钩子
+    compiler.hooks.emit.tapAsync('FileListPlugin', (compilation, cb) => {
+      // 通过 compilation.assets 获取文件数量
+      let len = Object.keys(compilation.assets).length
+
+      // 添加统计信息
+      let content = `# ${len} file${len > 1 ? 's' : ''} emitted by webpack\n\n`
+
+      // 通过 compilation.assets 获取文件名列表
+      for (let filename in compilation.assets) {
+        content += `- ${filename}\n`
+      }
+
+      // 往 compilation.assets 中添加清单文件
+      compilation.assets[this.filename] = {
+        // 写入新文件的内容
+        source: function () {
+          return content
+        },
+        // 新文件大小（给 webapck 输出展示用）
+        size: function () {
+          return content.length
+        },
+      }
+
+      // 执行回调，让 webpack 继续执行
+      cb()
+    })
+  }
+}
+
+module.exports = FileListPlugin
+```
+
+### 手写插件 2：去除注释
+
+开发一个插件能够去除打包后代码的注释，这样我们的 bundle.js 将更容易阅读
+
+思路：
+
+1. 通过 compiler.hooks.emit.tap()来触发生成文件后的钩子
+2. 通过 compilation.assets 拿到生产后的文件，然后去遍历各个文件
+3. 通过.source()获取构建产物的文本，然后用正则去replace调注释的代码
+4. 更新构建产物对象
+5. 执行回调，让 webpack 继续执行
+
+```js
+class RemoveCommentPlugin {
+  constructor(options) {
+    this.options = options
+  }
+  apply(compiler) {
+    // 去除注释正则
+    const reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n))|(\/\*(\n|.)*?\*\/)|(\/\*\*\*\*\*\*\/)/g
+
+    compiler.hooks.emit.tap('RemoveComment', (compilation) => {
+      // 遍历构建产物，.assets中包含构建产物的文件名
+      Object.keys(compilation.assets).forEach((item) => {
+        // .source()是获取构建产物的文本
+        let content = compilation.assets[item].source()
+        content = content.replace(reg, function (word) {
+          // 去除注释后的文本
+          return /^\/{2,}/.test(word) || /^\/\*!/.test(word) || /^\/\*{3,}\//.test(word) ? '' : word
+        })
+        // 更新构建产物对象
+        compilation.assets[item] = {
+          source: () => content,
+          size: () => content.length,
+        }
+      })
+    })
+  }
+}
+
+module.exports = RemoveCommentPlugin
+```
 
 ### 参考文献
 
