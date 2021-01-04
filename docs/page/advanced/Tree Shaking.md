@@ -1,8 +1,10 @@
 # Tree Shaking 配置机制
 
-tree-shaking 简称摇树。它的作用是 能够在模块的层面上做到打包后的代码只包含被引用并被执行的模块，而不被引用或不被执行的模块被删除掉，以起到减包的效果。
+tree-shaking 简称摇树。它的作用是能够在模块的层面上做到打包后的代码只包含被引用并被执行的模块，而不被引用或不被执行的模块被删除掉，以起到减包的效果。
 
-新的 webpack 4 正式版本，扩展了这个检测能力，通过 package.json 的 "sideEffects" 属性作为标记，向 compiler 提供提示，表明项目中的哪些文件是 "pure(纯的 ES2015 模块)"，由此可以安全地删除文件中未使用的部分。
+tree-shaking 的目的，就是通过减少 web 项目中 JavaScript 的无用代码，以达到减少用户打开页面所需的等待时间，来增强用户体验。
+
+新的 webpack 4 正式版本，扩展了这个检测能力，通过 `package.json` 的 `"sideEffects"` 属性作为标记，向 compiler 提供提示，表明项目中的哪些文件是 "pure(纯的 ES2015 模块)"，由此可以安全地删除文件中未使用的部分。
 
 我们先来举个例子
 
@@ -67,6 +69,6 @@ sideEffects 是指 tree_shaking 对哪些文件有用，像我们上面的例子
 
 使用 Tree Shaking 的条件
 
-* 使用 ES2015 模块语法（即 import 和 export）。
-* 在项目 package.json 文件中，添加一个 "sideEffects" 入口。
-* 引入一个能够删除未引用代码(dead code)的压缩工具(minifier)（例如 UglifyJSPlugin）。
+- 使用 ES2015 模块语法（即 import 和 export）。
+- 在项目 package.json 文件中，添加一个 "sideEffects" 入口。
+- 引入一个能够删除未引用代码(dead code)的压缩工具(minifier)（例如 UglifyJSPlugin）。
