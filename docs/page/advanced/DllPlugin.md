@@ -11,6 +11,11 @@ DLL(Dynamic Link Library)文件为动态链接库文件,在 Windows 中，许多
 借助 DLLPlugin 插件实现将这些框架作为一个个的动态链接库，只构建一次，以后的每次构建都只会生成自己的业务代码，可以很好的提高构建效率
 猪哟思想在于，讲一些不做修改的依赖文件，提前打包，这样我们开发代码发布的时候就不需要再对这些代码进行打包，从而节省了打包时间，主要使用两个插件: DLLPlugin 和 DLLReferencePlugin。
 
+DLLPlugin 这个插件是在一个额外独立的 webpack 设置中创建一个只有 dll 的 bundle，也就是说我们在项目根目录下除了有 webpack.config.js，还会新建一个 webpack.dll.config.js 文件。webpack.dll.config.js 作用是把所有的第三方库依赖打包到一个 bundle 的 dll 文件里面，还会生成一个名为 manifest.json 文件。
+该 manifest.json 的作用是用来让 DllReferencePlugin 映射到相关的依赖上去的。
+
+DllReferencePlugin 这个插件是在 webpack.config.js 中使用的，该插件的作用是把刚刚在 webpack.dll.config.js 中打包生成的 dll 文件引用到需要的预编译的依赖上来。什么意思呢？就是说在 webpack.dll.config.js 中打包后比如会生成 vendor.dll.js 文件和 vendor-manifest.json 文件，vendor.dll.js 文件包含所有的第三方库文件，vendor-manifest.json 文件会包含所有库代码的一个索引，当在使用 webpack.config.js 文件打包 DllReferencePlugin 插件的时候，会使用该 DllReferencePlugin 插件读取 vendor-manifest.json 文件，看看是否有该第三方库。vendor-manifest.json 文件就是有一个第三方库的一个映射而已。
+
 需要注意的是，若是使用的 DLLPlugin，CleanWebpackPlugin 插件会存在冲突，需要移除 CleanWebpackPlugin 插件
 
 ### DLLReferencePlugin
@@ -65,7 +70,7 @@ module.exports = {
 ```
 
 - `library` 的意思其实就是将 dll 文件以一个全局变量的形式导出出去，便于接下来引用。
-- `mainfest.json` 文件是一个映射关系，它的作用就是帮助 webpack 使用我们之前打包好的 `***.dll.js` 文件，而不是重新再去 `node_modules` 中去寻找。
+- `manifest.json` 文件是一个映射关系，它的作用就是帮助 webpack 使用我们之前打包好的 `***.dll.js` 文件，而不是重新再去 `node_modules` 中去寻找。
 
 2、在 `webpack.prod.conf.js` 的 plugin 后面加入配置
 
@@ -108,9 +113,14 @@ new AddAssetHtmlWebpackPlugin({
 配置插件自动添加 script 标签到 HTML 中，需要注意的是，必须在 `HtmlWebpackPlugin` 后面引入，因为 `HtmlWebpackPlugin` 是生产一个 html 文件，`AddAssetHtmlWebpackPlugin` 是在已有的 html 中注入一个 script，否则会被覆盖。
 
 ### 总结
-dll的两个作用
 
-* 分离代码，业务代码和第三方模块可以被打包到不同的文件里，这个有几个好处：
-    * 避免打包出单个文件的大小太大，不利于调试
-    * 将单个大文件拆成多个小文件之后，一定情况下有利于加载（不超出浏览器一次性请求的文件数情况下，并行下载肯定比串行快）
-* 提升构建速度。第三方库没有变更时，由于我们只构建业务相关代码，相比全部重新构建自然要快的多。
+dll 的两个作用
+
+- 分离代码，业务代码和第三方模块可以被打包到不同的文件里，这个有几个好处：
+  - 避免打包出单个文件的大小太大，不利于调试
+  - 将单个大文件拆成多个小文件之后，一定情况下有利于加载（不超出浏览器一次性请求的文件数情况下，并行下载肯定比串行快）
+- 提升构建速度。第三方库没有变更时，由于我们只构建业务相关代码，相比全部重新构建自然要快的多。
+
+### 参考文献
+
+[深入浅出的webpack构建工具---DllPlugin DllReferencePlugin提高构建速度](https://www.cnblogs.com/tugenhua0707/p/9520780.html)  
