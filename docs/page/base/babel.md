@@ -35,7 +35,7 @@ function add(x, y) {
 add(1, 2)
 ```
 
-然后将代码解析成抽象语法树，表示成 JSON 形式如下：
+然后将代码解析成抽象语法树，表示成 JSON 形式如下：我们可以看到 AST 中有很多相似的元素，它们都有一个 type 属性，这样的元素被称作节点。一个节点通常含有若干属性，可以用于描述 AST 的部分信息。
 
 ```js
 {
@@ -310,4 +310,5 @@ Babel 团队为了方便，将同属 ES2015 几十个 Transform Plugins 集合�
 ```
 
 ### 参考文献
-[import、require、export、module.exports 混合使用详解](https://juejin.im/post/6844903520865386510)
+[import、require、export、module.exports 混合使用详解](https://juejin.im/post/6844903520865386510)  
+[如何用 Babel 为代码自动引入依赖](https://mp.weixin.qq.com/s?__biz=MzkzOTE3MDQ0Ng==&mid=2247483789&idx=1&sn=3474a3080c715d7a461c1466e71bb76f)  
