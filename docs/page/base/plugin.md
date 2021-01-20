@@ -532,6 +532,25 @@ console.log(r)
 
 这样就 OK 了。既能够显示中文，又把不必要的语言包都忽略打包了
 
+## useless-files-webpack-plugin
+
+在 webpack 打包项目过程中，常遇见一些无用的图片，js 文件，怎样能够自动检测哪些是无用的文件呢？useless-files-webpack-plugin 查找无用文件，在 terminal 中删除。
+
+```js
+const UselessFile = require('useless-files-webpack-plugin')
+
+plugins: [
+  new UselessFile({
+    root: './src', // 项目目录
+    out: './fileList.json', // 输出文件列表
+    clean: false, // 删除文件,
+    // exclude: './node_modules' // 排除文件列表, 格式为文件路径数组
+  }),
+]
+```
+
+打包时自动在项目的根目录下生成unused-files.json, 保存着无用文件的列表。
+
 ### 开发一个插件
 
 举个例子
