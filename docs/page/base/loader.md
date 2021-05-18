@@ -1,6 +1,6 @@
 # Loader
 
-`loader` 让 `webpack` 能够去处理那些非 js 文件（`webpack` 自身只理解 `javaScript`）。遇到非 js 结尾的模块，webpack 会去 module 中找相应的规则，匹配到了对于的规则，然后去求助于对应的 loader
+loader 让 webpack 能够去处理那些非 js 文件（webpack 自身只理解 javaScript）。遇到非 js 结尾的模块，webpack 会去 module 中找相应的规则，匹配到了对于的规则，然后去求助于对应的 loader
 
 ### loader 的特点
 
@@ -69,30 +69,31 @@ const compose = (...fns) => {
 rules: [
   {
     test: /\.css$/, // 正则匹配以.css结尾的文件
-    use: ['style-loader', 'css-loader', 'postcss-loader'],
+    use: ['style-loader', 'css-loader', 'postcss-loader']
   },
   {
     test: /\.less$/,
-    use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader'],
-  },
+    use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
+  }
 ]
 ```
 
-- `style-loader` 放在 `css-loader` 后面是因为 webpack 打包机制是按照数组从后往前的顺序将资源交个 loader 处理。
-- `postcss-loader` 要和`autoprefixer`一起使用。在项目根目录下新建 postcss.config.js 文件:
+`style-loader` 放在 `css-loader` 后面是因为 webpack 打包机制是按照数组从后往前的顺序将资源交个 loader 处理。  
+
+`postcss-loader` 要和`autoprefixer`一起使用。在项目根目录下新建 postcss.config.js 文件:
 
 ```js
 module.exports = {
   plugins: [
-    require('autoprefixer'), // 引用autoprefixer模块
-  ],
+    require('autoprefixer') // 引用autoprefixer模块
+  ]
 }
 ```
 
 #### 处理 js
 
-- 让你能使用最新的 js 代码（ES6，ES7...）
-- 让你能使用基于 js 进行了拓展的语言，比如 React 的 JSX；
+1. 让你能使用最新的 js 代码（ES6，ES7...）
+2. 让你能使用基于 js 进行了拓展的语言，比如 React 的 JSX；
 
 ```js
 rules: [
@@ -103,10 +104,10 @@ rules: [
       loader: 'babel-loader',
       options: {
         cacheDirectory: true,
-        presets: [['env', { modules: false }]],
-      },
-    },
-  },
+        presets: [['env', { modules: false }]]
+      }
+    }
+  }
 ]
 ```
 
@@ -156,8 +157,8 @@ rules: [
           esModule: false,
           limit: 1000, // 限制只有小于1kb的图片才转为base64，例子图片为1.47kb,所以不会被转化
           outputPath: 'images', // 设置打包后图片存放的文件夹名称
-          name: '[name][hash:8].[ext]',
-        },
+          name: '[name][hash:8].[ext]'
+        }
       },
       {
         loader: 'image-webpack-loader',
@@ -165,29 +166,29 @@ rules: [
           // 压缩 jpeg 的配置
           mozjpeg: {
             progressive: true,
-            quality: 65,
+            quality: 65
           },
           // 使用 imagemin**-optipng 压缩 png，enable: false 为关闭
           optipng: {
-            enabled: false,
+            enabled: false
           },
           // // 使用 imagemin-pngquant 压缩 png
           pngquant: {
             quality: [0.65, 0.9],
-            speed: 4,
+            speed: 4
           },
           // 压缩 gif 的配置
           gifsicle: {
-            interlaced: false,
+            interlaced: false
           },
           // 开启 webp，会把 jpg 和 png 图片压缩为 webp 格式
           webp: {
-            quality: 75,
-          },
-        },
-      },
-    ],
-  },
+            quality: 75
+          }
+        }
+      }
+    ]
+  }
 ]
 ```
 

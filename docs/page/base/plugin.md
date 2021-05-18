@@ -12,9 +12,11 @@
 
 #### loader 和 plugin 的区别
 
-- loader，它是一个转换器，将 A 文件进行编译成 B 文件，比如：将 A.less 转换为 A.css，单纯的文件转换过程。webpack 自身只支持 js 和 json 这两种格式的文件，对于其他文件需要通过 loader 将其转换为 commonJS 规范的文件后，webpack 才能解析到
+- loade 它是一个转换器，它本质是一个函数，在该函数中对接收的内容进行转换，返回转换后的结果。比如：将 A.less 转换为 A.css，单纯的文件转换过程。webpack 自身只支持 js 和 json 这两种格式的文件，对于其他文件需要通过 loader 将其转换为 commonJS 规范的文件后，webpack 才能解析到
 
 - plugin 是一个扩展器，它丰富了 webpack 本身，针对是 loader 结束后，webpack 打包的整个过程，它并不直接操作文件，而是基于事件机制工作，会监听 webpack 打包过程中的某些节点，执行广泛的任务。
+
+- 在配置上，Loader 在 module.rules 中配置，作为模块的解析规则，类型为数组。每一项都是一个 Object，内部包含了 test(类型文件)、loader、options (参数)等属性。 Plugin 在 plugins 中单独配置，类型为数组，每一项是一个 Plugin 的实例，参数都通过构造函数传入。
 
 ## HotModuleReplacementPlugin
 
@@ -26,7 +28,7 @@
 const webpack = require('webpack')
 
 plugins: [
-  new webpack.HotModuleReplacementPlugin(), // 热更新插件
+  new webpack.HotModuleReplacementPlugin() // 热更新插件
 ]
 ```
 
@@ -45,10 +47,10 @@ plugins: [
       // 压缩HTML文件
       removeComments: true, // 移除HTML中的注释
       collapseWhitespace: true, // 删除空白符与换行符
-      minifyCSS: true, // 压缩内联css
+      minifyCSS: true // 压缩内联css
     },
-    inject: true,
-  }),
+    inject: true
+  })
 ]
 ```
 
@@ -69,23 +71,23 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   entry: {
     index: './src/index.js',
-    login: './src/login.js',
+    login: './src/login.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[hash:6].js',
+    filename: '[name].[hash:6].js'
   },
   //...
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      filename: 'index.html', //打包后的文件名
+      filename: 'index.html' //打包后的文件名
     }),
     new HtmlWebpackPlugin({
       template: './public/login.html',
-      filename: 'login.html', //打包后的文件名
-    }),
-  ],
+      filename: 'login.html' //打包后的文件名
+    })
+  ]
 }
 ```
 
@@ -102,14 +104,14 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
       filename: 'index.html', //打包后的文件名
-      chunks: ['index'],
+      chunks: ['index']
     }),
     new HtmlWebpackPlugin({
       template: './public/login.html',
       filename: 'login.html', //打包后的文件名
-      chunks: ['login'],
-    }),
-  ],
+      chunks: ['login']
+    })
+  ]
 }
 ```
 
@@ -124,9 +126,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 plugins: [
   new HtmlWebpackPlugin({
-    template: path.join(__dirname, '/index.html'),
+    template: path.join(__dirname, '/index.html')
   }),
-  new CleanWebpackPlugin(), // 所要清理的文件夹名称
+  new CleanWebpackPlugin() // 所要清理的文件夹名称
 ]
 ```
 
@@ -139,7 +141,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 plugins: [
   // 将css分离到/dist文件夹下的css文件夹中的index.css
-  new ExtractTextPlugin('css/index.css'),
+  new ExtractTextPlugin('css/index.css')
 ]
 ```
 
@@ -166,22 +168,22 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              publicPath: '../',
-            },
+              publicPath: '../'
+            }
           },
           'css-loader',
           'postcss-loader',
-          'less-loader',
-        ],
-      },
-    ],
+          'less-loader'
+        ]
+      }
+    ]
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:8].css',
-      chunkFilename: 'css/[id].[contenthash:8].css',
-    }),
-  ],
+      chunkFilename: 'css/[id].[contenthash:8].css'
+    })
+  ]
 }
 ```
 
@@ -197,9 +199,9 @@ const glob = require('glob') // 引入glob模块,用于扫描全部html文件中
 module.exports = merge(common, {
   plugins: [
     new PurifyCssWebpack({
-      paths: glob.sync(path.join(__dirname, 'src/*.html')),
-    }),
-  ],
+      paths: glob.sync(path.join(__dirname, 'src/*.html'))
+    })
+  ]
 })
 ```
 
@@ -258,13 +260,13 @@ plugins: [
     sourceMap: true,
     uglifyJS: {
       output: {
-        comments: false,
+        comments: false
       },
       compress: {
-        warnings: false,
-      },
-    },
-  }),
+        warnings: false
+      }
+    }
+  })
 ]
 ```
 
@@ -280,8 +282,8 @@ optimization: {
     new TerserPlugin({
       parallel: 4, // 开启几个进程来处理压缩，默认是 os.cpus().length - 1
       cache: true, // 是否缓存
-      sourceMap: false,
-    }),
+      sourceMap: false
+    })
   ]
 }
 ```
@@ -308,8 +310,8 @@ plugins: [
     // gzip压缩配置
     test: /\.js$|\.html$|\.css/, // 匹配文件名
     threshold: 10240, // 对超过10kb的数据进行压缩
-    deleteOriginalAssets: false, // 是否删除原文件
-  }),
+    deleteOriginalAssets: false // 是否删除原文件
+  })
 ]
 ```
 
@@ -322,8 +324,8 @@ plugins: [
 ```js
 plugins: [
   new webpack.DefinePlugin({
-    DESCRIPTION: 'This Is The Test Text.',
-  }),
+    DESCRIPTION: 'This Is The Test Text.'
+  })
 ]
 
 // 直接引用
@@ -338,16 +340,16 @@ console.log(DESCRIPTION)
 module.exports = {
   resolve: {
     alias: {
-      jquery: './lib/jquery',
-    },
+      jquery: './lib/jquery'
+    }
   },
   plugins: [
     //提供全局的变量，在模块中使用无需用require引入
     new webpack.ProvidePlugin({
       $: 'jquery',
-      React: 'react',
-    }),
-  ],
+      React: 'react'
+    })
+  ]
 }
 ```
 
@@ -372,26 +374,26 @@ module.exports = {
       'vue-loader/lib/component-normalizer.js',
       'vue',
       'axios',
-      'echarts',
-    ],
+      'echarts'
+    ]
   },
   output: {
     path: path.resolve('./dist'),
     filename: '[name].dll.js',
-    library: '[name]_library',
+    library: '[name]_library'
   },
   plugins: [
     new webpack.DllPlugin({
       path: path.resolve('./dist', '[name]-manifest.json'),
-      name: '[name]_library',
+      name: '[name]_library'
     }),
     // 建议加上代码压缩插件，否则dll包会比较大。
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false,
-      },
-    }),
-  ],
+        warnings: false
+      }
+    })
+  ]
 }
 ```
 
@@ -399,7 +401,7 @@ module.exports = {
 
 ```js
 new webpack.DllReferencePlugin({
-  manifest: require('../dist/vendor-manifest.json'),
+  manifest: require('../dist/vendor-manifest.json')
 })
 ```
 
@@ -442,12 +444,12 @@ module: {
       test: /\.js$/,
       use: ['happypack/loader?id=babel'],
       include: [resolve('src'), resolve('test')],
-      exclude: path.resolve(__dirname, 'node_modules'),
+      exclude: path.resolve(__dirname, 'node_modules')
     },
     {
       test: /\.vue$/,
-      use: ['happypack/loader?id=vue'],
-    },
+      use: ['happypack/loader?id=vue']
+    }
   ]
 }
 ```
@@ -464,18 +466,18 @@ plugins: [
     id: 'babel',
     // 如何处理.js文件，用法和Loader配置中一样
     loaders: ['babel-loader?cacheDirectory'],
-    threadPool: HappyPackThreadPool,
+    threadPool: HappyPackThreadPool
   }),
   new HappyPack({
     id: 'vue', // 用唯一的标识符id，来代表当前的HappyPack是用来处理一类特定的文件
     loaders: [
       {
         loader: 'vue-loader',
-        options: vueLoaderConfig,
-      },
+        options: vueLoaderConfig
+      }
     ],
-    threadPool: HappyPackThreadPool,
-  }),
+    threadPool: HappyPackThreadPool
+  })
 ]
 ```
 
@@ -494,11 +496,11 @@ module.exports = {
         {
           from: 'public/js/*.js',
           to: path.resolve(__dirname, 'dist', 'js'),
-          flatten: true,
-        },
-      ],
-    }),
-  ],
+          flatten: true
+        }
+      ]
+    })
+  ]
 }
 ```
 
@@ -512,7 +514,7 @@ module.exports = {
 const Webpack = require('webpack')
 plugins: [
   //moment这个库中，如果引用了./locale/目录的内容，就忽略掉，不会打包进去
-  new Webpack.IgnorePlugin(/\.\/locale/, /moment/),
+  new Webpack.IgnorePlugin(/\.\/locale/, /moment/)
 ]
 ```
 
@@ -543,13 +545,13 @@ plugins: [
   new UselessFile({
     root: './src', // 项目目录
     out: './fileList.json', // 输出文件列表
-    clean: false, // 删除文件,
+    clean: false // 删除文件,
     // exclude: './node_modules' // 排除文件列表, 格式为文件路径数组
-  }),
+  })
 ]
 ```
 
-打包时自动在项目的根目录下生成unused-files.json, 保存着无用文件的列表。
+打包时自动在项目的根目录下生成 unused-files.json, 保存着无用文件的列表。
 
 ### 开发一个插件
 

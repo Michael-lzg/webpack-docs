@@ -34,6 +34,7 @@ module.exports = {
           collapsable: false,
           children: [
             'base/entry',
+            'base/output',
             'base/loader',
             'base/plugin',
             'base/webpack-dev-derver',
