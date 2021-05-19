@@ -2,7 +2,9 @@
 
 告诉 webpack 在哪里输出它所创建的 bundles，以及如何命名这些文件，这些都可以在 webpack 的配置文件中指定。
 
-单⼊⼝配置
+### filename
+
+单⼊⼝配置：只有一个输出文件，则可以把它写成静态不变
 
 ```js
 module.exports = {
@@ -14,18 +16,18 @@ module.exports = {
 };
 ```
 
-多⼊⼝配置
+多⼊⼝配置: 有多个 Chunk 要输出时，就需要借助模版和变量了， Webpack 会为每个 Chunk 取一个名称，可以根据 Chunk 的名称来区分输出的文件名
 
 ```js
 module.exports = {
   entry: {
     app: './src/app.js',
-    search: './src/search.js',
+    search: './src/search.js'
   },
   output: {
     filename: '[name].js',
-    path: __dirname + '/dist',
-  },
+    path: __dirname + '/dist'
+  }
 }
 ```
 
@@ -35,17 +37,39 @@ module.exports = {
 module.exports = {
   entry: {
     app: './src/app.js',
-    search: './src/search.js',
+    search: './src/search.js'
   },
   output: {
     path: path.join(__dirname, '/dist'), //打包后的文件存放的地方
     filename: 'js/[name].[chunkhash:8].js',
-    chunkFilename: 'js/[name].[chunkhash:8].js',
-  },
+    chunkFilename: 'js/[name].[chunkhash:8].js'
+  }
 }
 ```
 
-### output libraryTarget
+### publicPath
+
+output.publicPath 可以配置发布到线上资源的 URL 前缀，为 string 类型。 默认值是空字符串 ''，即使用相对路径。
+
+举个例子，需要把构建出的资源文件上传到 CDN 服务上，以利于加快页面的打开速度。配置代码如下：
+
+```js
+module.exports = {
+  output: {
+    path: path.join(__dirname, '/dist'),
+    filename: '[name]_[chunkhash:8].js',
+    publicPath: 'https://cdn.example.com/assets/'
+  }
+}
+```
+
+这时发布到线上的 HTML 在引入 JavaScript 文件时就需要：
+
+```html
+<script src="https://cdn.example.com/assets/a_12345678.js"></script>
+```
+
+### libraryTarget
 
 此配置的作用是控制 webpack 打包的内容是如何暴露的。请注意这个选项需要和 output.library 所绑定的值一起产生作用。
 
@@ -94,5 +118,3 @@ output.libraryTarget 一共支持的值：
 - amd: 这个选项会把库作为 AMD 模块导出。
 - umd: 这个选项会尝试把库暴露给前使用的模块定义系统，这使其和 CommonJS、AMD 兼容或者暴露为全局变量。
 - jsonp: 这个方法会使用 jsonp 的方式把结果包裹起来。
-
-
